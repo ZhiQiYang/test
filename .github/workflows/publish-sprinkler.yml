@@ -1,0 +1,71 @@
+name: Publish sprinkler solver
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'sprinkler-solver/part-*.txt'
+      - '.github/workflows/publish-sprinkler.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: publish-sprinkler
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+      - name: Restore and verify exact original HTML
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64, gzip, hashlib
+          root = Path('sprinkler-solver')
+          def part(name):
+              return (root / name).read_text().strip()
+          second = part('part-2.txt')
+          payload = (part('part-1.txt') + second[:1539]
+                     + part('part-2-middle.txt') + second[1539:]
+                     + part('part-3a.txt') + part('part-3b.txt'))
+          assert len(payload) == 44092, ('Unexpected package length', len(payload))
+          html = gzip.decompress(base64.b64decode(payload, validate=True))
+          expected = '4b8f777402834bcdab00364a2276cf150cb381a4e938231dc6aa6af8cfc1ca3e'
+          actual = hashlib.sha256(html).hexdigest()
+          assert actual == expected, ('Original HTML checksum mismatch', actual)
+          (root / 'index.html').write_bytes(html)
+          print('Verified original HTML:', len(html), 'bytes, SHA-256', actual)
+          PY
+      - name: Run all embedded solver tests
+        shell: bash
+        run: |
+          node <<'JS'
+          const fs = require('node:fs');
+          const vm = require('node:vm');
+          const html = fs.readFileSync('sprinkler-solver/index.html','utf8');
+          const scripts = [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
+          const ctx = {};
+          vm.createContext(ctx);
+          vm.runInContext(scripts[1],ctx);
+          vm.runInContext(scripts[2],ctx);
+          const tests = ctx.ThreadTests.run();
+          console.log(JSON.stringify(tests,null,2));
+          if (tests.length !== 25 || tests.some(t=>!t.pass)) process.exit(1);
+          console.log('All 25 solver tests passed.');
+          JS
+      - name: Publish verified standalone file
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add sprinkler-solver/index.html
+          if git diff --cached --quiet; then
+            echo 'Verified file already published.'
+          else
+            git commit -m 'Publish verified standalone sprinkler height solver'
+            git push origin HEAD:master
+          fi
