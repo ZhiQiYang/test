@@ -1,0 +1,685 @@
+{
+  "schemaVersion": "sprinkler-assembly/3.0",
+  "name": "四彎頭偏移・資料驅動示例",
+  "mode": "example",
+  "units": "mm",
+  "displayUnit": "cm",
+  "coordinateSystem": "right-handed-Z-up",
+  "sources": [
+    {
+      "id": "store",
+      "kind": "user",
+      "title": "材料行貨架長度：使用者確認 cm",
+      "locator": "本對話：IMG_4469～4471；使用者「單位是cm」",
+      "note": "確認標籤單位；尚未逐支量端面總長、確認口徑或存量。13 標籤仍被遮擋。"
+    },
+    {
+      "id": "sgp-reference",
+      "kind": "supplier",
+      "title": "昇億／遠東 SGP 15A 尺寸公開表",
+      "locator": "https://www.snyi.com.tw/product-femco04.html",
+      "note": "15A 外徑21.7、壁厚2.8mm。只是供應規格參考，未認定貨架實物為SGP或此品牌。"
+    },
+    {
+      "id": "thread-guide",
+      "kind": "manufacturer",
+      "title": "Swagelok MS-13-77 螺紋識別指南",
+      "locator": "https://www.swagelok.com/downloads/webcatalogs/EN/MS-13-77.pdf",
+      "note": "PDF第13、21、26頁；ISO7-1 1/2為14TPI。識別數值不是螺紋檢驗尺寸，也沒有通用鎖緊圈數。"
+    },
+    {
+      "id": "soda",
+      "kind": "manufacturer",
+      "title": "碩達立布品名與產品資料",
+      "locator": "https://www.soda-chen.com.tw/about-us.html",
+      "note": "立布製造商的品名與牙規範圍，不代表照片實物來源。"
+    },
+    {
+      "id": "demo",
+      "kind": "assumption",
+      "title": "幾何與裝配驗證示例",
+      "locator": "本檔 SeedFactory",
+      "note": "所有示例接頭尺寸、圈數上下限、吃入深度及灑水頭基準偏移，均非廠商安裝許可。"
+    },
+    {
+      "id": "definition",
+      "kind": "definition",
+      "title": "本工具座標及尺寸基準",
+      "locator": "schemaVersion sprinkler-assembly/3.0",
+      "note": "固定出口端面為原點；Z向上；每個接頭有自己的端面、局部軸向和角度零位。"
+    },
+    {
+      "id": "pending",
+      "kind": "measurement",
+      "title": "現場待量測",
+      "locator": "尚未提供",
+      "note": "null是缺資料，不是零。"
+    },
+    {
+      "id": "edit",
+      "kind": "user",
+      "title": "本次手動輸入，待覆核",
+      "locator": "本機介面",
+      "note": "手動改值不自動變成廠商資料或已量測資料。"
+    }
+  ],
+  "thread": {
+    "family": "ISO7-1",
+    "nominal": "1/2",
+    "tpi": {
+      "value": 14,
+      "unit": "tpi",
+      "status": "catalog",
+      "sourceRef": "thread-guide",
+      "basis": "單線參考，未辨識現場牙規"
+    },
+    "starts": 1,
+    "hand": "right",
+    "identityConfirmed": false
+  },
+  "catalog": [
+    {
+      "id": "pipe",
+      "name": "雙外牙立布",
+      "kind": "nipple",
+      "representation": "tube-envelope",
+      "dimensions": {
+        "length": {
+          "value": 200,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "outerDiameter": {
+          "value": 21.7,
+          "unit": "mm",
+          "status": "catalog",
+          "sourceRef": "sgp-reference",
+          "basis": "SGP 15A參考值"
+        },
+        "wall": {
+          "value": 2.8,
+          "unit": "mm",
+          "status": "catalog",
+          "sourceRef": "sgp-reference",
+          "basis": "SGP 15A參考值"
+        },
+        "threadZone": {
+          "value": 16,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        }
+      },
+      "identityConfirmed": false,
+      "threadFamily": "ISO7-1",
+      "nominal": "1/2",
+      "material": "未確認；示例參考",
+      "note": "資料與幾何均不代表照片實物已辨識。"
+    },
+    {
+      "id": "socket",
+      "name": "雙內牙接頭",
+      "kind": "coupling",
+      "representation": "tube-envelope",
+      "dimensions": {
+        "length": {
+          "value": 32,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "outerDiameter": {
+          "value": 32,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "wall": {
+          "value": 5,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "threadZone": {
+          "value": 14,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        }
+      },
+      "identityConfirmed": false,
+      "threadFamily": "ISO7-1",
+      "nominal": "1/2",
+      "material": "未確認；示例參考",
+      "note": "資料與幾何均不代表照片實物已辨識。"
+    },
+    {
+      "id": "elbow",
+      "name": "90°雙內牙彎頭",
+      "kind": "elbow90",
+      "representation": "swept-envelope",
+      "dimensions": {
+        "centerIn": {
+          "value": 27,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "centerOut": {
+          "value": 27,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "bendRadius": {
+          "value": 20,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "outerDiameter": {
+          "value": 32,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "wall": {
+          "value": 5,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "threadZone": {
+          "value": 14,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        }
+      },
+      "identityConfirmed": false,
+      "threadFamily": "ISO7-1",
+      "nominal": "1/2",
+      "material": "未確認；示例參考",
+      "note": "資料與幾何均不代表照片實物已辨識。"
+    },
+    {
+      "id": "head-datum",
+      "name": "灑水頭對位基準",
+      "kind": "datum",
+      "representation": "datum-only",
+      "dimensions": {
+        "datumOffset": {
+          "value": 35,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "threadZone": {
+          "value": 16,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        }
+      },
+      "identityConfirmed": false,
+      "threadFamily": "ISO7-1",
+      "nominal": "1/2",
+      "material": "未確認；示例參考",
+      "note": "資料與幾何均不代表照片實物已辨識。"
+    }
+  ],
+  "assembly": {
+    "root": {
+      "positionMm": [
+        0,
+        0,
+        0
+      ],
+      "quaternionXYZW": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "threadFamily": "ISO7-1",
+      "nominal": "1/2",
+      "sourceRef": "definition",
+      "threadZone": {
+        "value": 16,
+        "unit": "mm",
+        "status": "assumed",
+        "sourceRef": "demo",
+        "basis": "示例值，不是現場實測"
+      }
+    },
+    "instances": [
+      {
+        "id": "P0",
+        "catalogRef": "pipe",
+        "lengthOverride": {
+          "value": 40,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        }
+      },
+      {
+        "id": "E1",
+        "catalogRef": "elbow"
+      },
+      {
+        "id": "P1",
+        "catalogRef": "pipe",
+        "lengthOverride": {
+          "value": 120,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        }
+      },
+      {
+        "id": "E2",
+        "catalogRef": "elbow"
+      },
+      {
+        "id": "P2",
+        "catalogRef": "pipe",
+        "lengthOverride": {
+          "value": 60,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        }
+      },
+      {
+        "id": "E3",
+        "catalogRef": "elbow"
+      },
+      {
+        "id": "P3",
+        "catalogRef": "pipe",
+        "lengthOverride": {
+          "value": 40,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        }
+      },
+      {
+        "id": "E4",
+        "catalogRef": "elbow"
+      },
+      {
+        "id": "P4",
+        "catalogRef": "pipe",
+        "lengthOverride": {
+          "value": 200,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        }
+      },
+      {
+        "id": "S1",
+        "catalogRef": "socket"
+      },
+      {
+        "id": "H1",
+        "catalogRef": "head-datum"
+      }
+    ],
+    "joints": [
+      {
+        "id": "J1",
+        "parent": "root",
+        "parentPort": "out",
+        "child": "P0",
+        "childPort": "A",
+        "zeroDefinition": "n=0時的自訂記號；e0由端面實測，不是露牙數",
+        "referenceTurns": 0,
+        "insertionAtReference": {
+          "value": 8,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "angleAtReferenceDeg": -180,
+        "minimumTurns": 1,
+        "maximumTurns": 2,
+        "mode": "phase",
+        "phaseTurns": 1.5,
+        "fixedTurns": 1.5,
+        "currentTurns": 1.5,
+        "limitsSourceRef": "demo",
+        "limitsConfirmed": false
+      },
+      {
+        "id": "J2",
+        "parent": "P0",
+        "parentPort": "B",
+        "child": "E1",
+        "childPort": "A",
+        "zeroDefinition": "n=0時的自訂記號；e0由端面實測，不是露牙數",
+        "referenceTurns": 0,
+        "insertionAtReference": {
+          "value": 8,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "angleAtReferenceDeg": 0,
+        "minimumTurns": 1,
+        "maximumTurns": 2,
+        "mode": "phase",
+        "phaseTurns": 1.5,
+        "fixedTurns": 1.5,
+        "currentTurns": 1.5,
+        "limitsSourceRef": "demo",
+        "limitsConfirmed": false
+      },
+      {
+        "id": "J3",
+        "parent": "E1",
+        "parentPort": "B",
+        "child": "P1",
+        "childPort": "A",
+        "zeroDefinition": "n=0時的自訂記號；e0由端面實測，不是露牙數",
+        "referenceTurns": 0,
+        "insertionAtReference": {
+          "value": 8,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "angleAtReferenceDeg": -180,
+        "minimumTurns": 1,
+        "maximumTurns": 2,
+        "mode": "phase",
+        "phaseTurns": 1.5,
+        "fixedTurns": 1.5,
+        "currentTurns": 1.5,
+        "limitsSourceRef": "demo",
+        "limitsConfirmed": false
+      },
+      {
+        "id": "J4",
+        "parent": "P1",
+        "parentPort": "B",
+        "child": "E2",
+        "childPort": "A",
+        "zeroDefinition": "n=0時的自訂記號；e0由端面實測，不是露牙數",
+        "referenceTurns": 0,
+        "insertionAtReference": {
+          "value": 8,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "angleAtReferenceDeg": -180,
+        "minimumTurns": 1,
+        "maximumTurns": 2,
+        "mode": "phase",
+        "phaseTurns": 1.5,
+        "fixedTurns": 1.5,
+        "currentTurns": 1.5,
+        "limitsSourceRef": "demo",
+        "limitsConfirmed": false
+      },
+      {
+        "id": "J5",
+        "parent": "E2",
+        "parentPort": "B",
+        "child": "P2",
+        "childPort": "A",
+        "zeroDefinition": "n=0時的自訂記號；e0由端面實測，不是露牙數",
+        "referenceTurns": 0,
+        "insertionAtReference": {
+          "value": 8,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "angleAtReferenceDeg": -180,
+        "minimumTurns": 1,
+        "maximumTurns": 2,
+        "mode": "phase",
+        "phaseTurns": 1.5,
+        "fixedTurns": 1.5,
+        "currentTurns": 1.5,
+        "limitsSourceRef": "demo",
+        "limitsConfirmed": false
+      },
+      {
+        "id": "J6",
+        "parent": "P2",
+        "parentPort": "B",
+        "child": "E3",
+        "childPort": "A",
+        "zeroDefinition": "n=0時的自訂記號；e0由端面實測，不是露牙數",
+        "referenceTurns": 0,
+        "insertionAtReference": {
+          "value": 8,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "angleAtReferenceDeg": 0,
+        "minimumTurns": 1,
+        "maximumTurns": 2,
+        "mode": "phase",
+        "phaseTurns": 1.5,
+        "fixedTurns": 1.5,
+        "currentTurns": 1.5,
+        "limitsSourceRef": "demo",
+        "limitsConfirmed": false
+      },
+      {
+        "id": "J7",
+        "parent": "E3",
+        "parentPort": "B",
+        "child": "P3",
+        "childPort": "A",
+        "zeroDefinition": "n=0時的自訂記號；e0由端面實測，不是露牙數",
+        "referenceTurns": 0,
+        "insertionAtReference": {
+          "value": 8,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "angleAtReferenceDeg": -180,
+        "minimumTurns": 1,
+        "maximumTurns": 2,
+        "mode": "phase",
+        "phaseTurns": 1.5,
+        "fixedTurns": 1.5,
+        "currentTurns": 1.5,
+        "limitsSourceRef": "demo",
+        "limitsConfirmed": false
+      },
+      {
+        "id": "J8",
+        "parent": "P3",
+        "parentPort": "B",
+        "child": "E4",
+        "childPort": "A",
+        "zeroDefinition": "n=0時的自訂記號；e0由端面實測，不是露牙數",
+        "referenceTurns": 0,
+        "insertionAtReference": {
+          "value": 8,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "angleAtReferenceDeg": -180,
+        "minimumTurns": 1,
+        "maximumTurns": 2,
+        "mode": "phase",
+        "phaseTurns": 1.5,
+        "fixedTurns": 1.5,
+        "currentTurns": 1.5,
+        "limitsSourceRef": "demo",
+        "limitsConfirmed": false
+      },
+      {
+        "id": "J9",
+        "parent": "E4",
+        "parentPort": "B",
+        "child": "P4",
+        "childPort": "A",
+        "zeroDefinition": "n=0時的自訂記號；e0由端面實測，不是露牙數",
+        "referenceTurns": 0,
+        "insertionAtReference": {
+          "value": 8,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "angleAtReferenceDeg": 0,
+        "minimumTurns": 1,
+        "maximumTurns": 2,
+        "mode": "continuous",
+        "phaseTurns": 1.5,
+        "fixedTurns": 1.5,
+        "currentTurns": 1.5,
+        "limitsSourceRef": "demo",
+        "limitsConfirmed": false
+      },
+      {
+        "id": "J10",
+        "parent": "P4",
+        "parentPort": "B",
+        "child": "S1",
+        "childPort": "A",
+        "zeroDefinition": "n=0時的自訂記號；e0由端面實測，不是露牙數",
+        "referenceTurns": 0,
+        "insertionAtReference": {
+          "value": 8,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "angleAtReferenceDeg": 0,
+        "minimumTurns": 1,
+        "maximumTurns": 2,
+        "mode": "continuous",
+        "phaseTurns": 1.5,
+        "fixedTurns": 1.5,
+        "currentTurns": 1.5,
+        "limitsSourceRef": "demo",
+        "limitsConfirmed": false
+      },
+      {
+        "id": "J11",
+        "parent": "S1",
+        "parentPort": "B",
+        "child": "H1",
+        "childPort": "A",
+        "zeroDefinition": "n=0時的自訂記號；e0由端面實測，不是露牙數",
+        "referenceTurns": 0,
+        "insertionAtReference": {
+          "value": 8,
+          "unit": "mm",
+          "status": "assumed",
+          "sourceRef": "demo",
+          "basis": "示例值，不是現場實測"
+        },
+        "angleAtReferenceDeg": 0,
+        "minimumTurns": 1,
+        "maximumTurns": 2,
+        "mode": "fixed",
+        "phaseTurns": 1.5,
+        "fixedTurns": 1.5,
+        "currentTurns": 1.5,
+        "limitsSourceRef": "demo",
+        "limitsConfirmed": false
+      }
+    ],
+    "variableInstance": "P4",
+    "datumInstance": "H1"
+  },
+  "stock": {
+    "sourceRef": "store",
+    "labelUnit": "cm",
+    "lengthBasis": "shelf-label",
+    "compatibleIdentityConfirmed": false,
+    "labelsCm": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30
+    ],
+    "excludedNotes": "13未讀清；單位cm已確認，含牙端面總長與規格相容未確認。"
+  },
+  "target": {
+    "drop": {
+      "value": 214.83571428571432,
+      "unit": "mm",
+      "status": "assumed",
+      "sourceRef": "demo",
+      "basis": "示例值，不是現場實測"
+    },
+    "toleranceMm": 0.5,
+    "uncertaintyMm": 0,
+    "datumLabel": "灑水頭指定對位面（非外觀底端推測）",
+    "axisToleranceDeg": 1,
+    "strategy": "adjustable"
+  },
+  "notes": [
+    "螺紋以端面、導程與套接變換計算；不生成加工牙型。",
+    "包絡實體可供尺寸檢查，不是製造級或消防驗收模型。"
+  ]
+}

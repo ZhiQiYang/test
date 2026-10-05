@@ -1,0 +1,562 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:sprinkler:assembly:3.0",
+  "title": "灑水頭接管：來源驅動裝配資料契約 v3",
+  "description": "內部 mm，右手 Z 向上。語意驗證另檢查接點鏈、牙規相容、圈數定義、套接深度與來源；可顯示的包絡幾何不等於消防適用或製造模型。",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "const": "sprinkler-assembly/3.0"
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 160
+    },
+    "mode": {
+      "enum": [
+        "example",
+        "field"
+      ]
+    },
+    "units": {
+      "const": "mm"
+    },
+    "displayUnit": {
+      "const": "cm"
+    },
+    "coordinateSystem": {
+      "const": "right-handed-Z-up"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "thread": {
+      "$ref": "#/$defs/thread"
+    },
+    "catalog": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 40,
+      "items": {
+        "$ref": "#/$defs/component"
+      }
+    },
+    "assembly": {
+      "$ref": "#/$defs/assembly"
+    },
+    "stock": {
+      "$ref": "#/$defs/stock"
+    },
+    "target": {
+      "$ref": "#/$defs/target"
+    },
+    "notes": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "name",
+    "mode",
+    "units",
+    "displayUnit",
+    "coordinateSystem",
+    "sources",
+    "thread",
+    "catalog",
+    "assembly",
+    "stock",
+    "target",
+    "notes"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "quantity": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "unit": {
+          "enum": [
+            "mm",
+            "tpi"
+          ]
+        },
+        "status": {
+          "enum": [
+            "user_confirmed",
+            "measured",
+            "catalog",
+            "assumed",
+            "unknown"
+          ]
+        },
+        "sourceRef": {
+          "type": "string",
+          "minLength": 1
+        },
+        "basis": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "value",
+        "unit",
+        "status",
+        "sourceRef",
+        "basis"
+      ],
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "kind": {
+          "enum": [
+            "user",
+            "observation",
+            "supplier",
+            "manufacturer",
+            "assumption",
+            "definition",
+            "measurement"
+          ]
+        },
+        "title": {
+          "type": "string"
+        },
+        "locator": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "title",
+        "locator",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "thread": {
+      "type": "object",
+      "properties": {
+        "family": {
+          "enum": [
+            "ISO7-1",
+            "NPT",
+            "unknown"
+          ]
+        },
+        "nominal": {
+          "type": "string"
+        },
+        "tpi": {
+          "$ref": "#/$defs/quantity"
+        },
+        "starts": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "hand": {
+          "enum": [
+            "right",
+            "left"
+          ]
+        },
+        "identityConfirmed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "family",
+        "nominal",
+        "tpi",
+        "starts",
+        "hand",
+        "identityConfirmed"
+      ],
+      "additionalProperties": false
+    },
+    "component": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "name": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "nipple",
+            "coupling",
+            "elbow90",
+            "datum"
+          ]
+        },
+        "representation": {
+          "enum": [
+            "tube-envelope",
+            "swept-envelope",
+            "datum-only"
+          ]
+        },
+        "material": {
+          "type": "string"
+        },
+        "identityConfirmed": {
+          "type": "boolean"
+        },
+        "threadFamily": {
+          "enum": [
+            "ISO7-1",
+            "NPT",
+            "unknown"
+          ]
+        },
+        "nominal": {
+          "type": "string"
+        },
+        "dimensions": {
+          "type": "object",
+          "properties": {
+            "length": {
+              "$ref": "#/$defs/quantity"
+            },
+            "outerDiameter": {
+              "$ref": "#/$defs/quantity"
+            },
+            "wall": {
+              "$ref": "#/$defs/quantity"
+            },
+            "centerIn": {
+              "$ref": "#/$defs/quantity"
+            },
+            "centerOut": {
+              "$ref": "#/$defs/quantity"
+            },
+            "bendRadius": {
+              "$ref": "#/$defs/quantity"
+            },
+            "datumOffset": {
+              "$ref": "#/$defs/quantity"
+            },
+            "threadZone": {
+              "$ref": "#/$defs/quantity"
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "kind",
+        "representation",
+        "material",
+        "identityConfirmed",
+        "threadFamily",
+        "nominal",
+        "dimensions",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "instance": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "catalogRef": {
+          "type": "string"
+        },
+        "lengthOverride": {
+          "$ref": "#/$defs/quantity"
+        }
+      },
+      "required": [
+        "id",
+        "catalogRef"
+      ],
+      "additionalProperties": false
+    },
+    "joint": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "parent": {
+          "type": "string"
+        },
+        "parentPort": {
+          "enum": [
+            "out",
+            "B"
+          ]
+        },
+        "child": {
+          "type": "string"
+        },
+        "childPort": {
+          "const": "A"
+        },
+        "zeroDefinition": {
+          "type": "string"
+        },
+        "referenceTurns": {
+          "type": "number"
+        },
+        "insertionAtReference": {
+          "$ref": "#/$defs/quantity"
+        },
+        "angleAtReferenceDeg": {
+          "type": "number"
+        },
+        "minimumTurns": {
+          "type": "number"
+        },
+        "maximumTurns": {
+          "type": "number"
+        },
+        "mode": {
+          "enum": [
+            "continuous",
+            "phase",
+            "fixed"
+          ]
+        },
+        "phaseTurns": {
+          "type": "number"
+        },
+        "fixedTurns": {
+          "type": "number"
+        },
+        "currentTurns": {
+          "type": "number"
+        },
+        "limitsSourceRef": {
+          "type": "string"
+        },
+        "limitsConfirmed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "parent",
+        "parentPort",
+        "child",
+        "childPort",
+        "zeroDefinition",
+        "referenceTurns",
+        "insertionAtReference",
+        "angleAtReferenceDeg",
+        "minimumTurns",
+        "maximumTurns",
+        "mode",
+        "phaseTurns",
+        "fixedTurns",
+        "currentTurns",
+        "limitsSourceRef",
+        "limitsConfirmed"
+      ],
+      "additionalProperties": false
+    },
+    "assembly": {
+      "type": "object",
+      "properties": {
+        "root": {
+          "type": "object",
+          "properties": {
+            "positionMm": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "quaternionXYZW": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 4,
+              "maxItems": 4
+            },
+            "threadFamily": {
+              "enum": [
+                "ISO7-1",
+                "NPT",
+                "unknown"
+              ]
+            },
+            "nominal": {
+              "type": "string"
+            },
+            "sourceRef": {
+              "type": "string"
+            },
+            "threadZone": {
+              "$ref": "#/$defs/quantity"
+            }
+          },
+          "required": [
+            "positionMm",
+            "quaternionXYZW",
+            "threadFamily",
+            "nominal",
+            "sourceRef",
+            "threadZone"
+          ],
+          "additionalProperties": false
+        },
+        "instances": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "$ref": "#/$defs/instance"
+          }
+        },
+        "joints": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "$ref": "#/$defs/joint"
+          }
+        },
+        "variableInstance": {
+          "type": "string"
+        },
+        "datumInstance": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "root",
+        "instances",
+        "joints",
+        "variableInstance",
+        "datumInstance"
+      ],
+      "additionalProperties": false
+    },
+    "stock": {
+      "type": "object",
+      "properties": {
+        "sourceRef": {
+          "type": "string"
+        },
+        "labelUnit": {
+          "const": "cm"
+        },
+        "lengthBasis": {
+          "enum": [
+            "shelf-label",
+            "end-to-end-confirmed"
+          ]
+        },
+        "compatibleIdentityConfirmed": {
+          "type": "boolean"
+        },
+        "labelsCm": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 200,
+          "uniqueItems": true,
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 1000
+          }
+        },
+        "excludedNotes": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sourceRef",
+        "labelUnit",
+        "lengthBasis",
+        "compatibleIdentityConfirmed",
+        "labelsCm",
+        "excludedNotes"
+      ],
+      "additionalProperties": false
+    },
+    "target": {
+      "type": "object",
+      "properties": {
+        "drop": {
+          "$ref": "#/$defs/quantity"
+        },
+        "toleranceMm": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "uncertaintyMm": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "datumLabel": {
+          "type": "string"
+        },
+        "axisToleranceDeg": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 90
+        },
+        "strategy": {
+          "enum": [
+            "adjustable",
+            "uncertain"
+          ]
+        }
+      },
+      "required": [
+        "drop",
+        "toleranceMm",
+        "uncertaintyMm",
+        "datumLabel",
+        "axisToleranceDeg",
+        "strategy"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
