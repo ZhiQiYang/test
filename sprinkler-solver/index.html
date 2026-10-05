@@ -1,1 +1,500 @@
-<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>灑水頭高度對位求解器・發布檢查</title><style>body{font:18px/1.7 system-ui,sans-serif;margin:0;padding:28px;color:#173934;background:#f3f6f4}main{max-width:600px;margin:auto}button{font:inherit;padding:14px 22px;border:0;border-radius:12px;color:white;background:#173934}</style></head><body><main><h1>高度對位求解器</h1><p>這是發布連線檢查頁，完整求解器尚未載入。請勿用於施工。</p><button id="check" type="button">檢查互動</button><p id="status">等待檢查。</p></main><script>document.getElementById('check').onclick=function(){document.getElementById('status').textContent='JavaScript 可執行；等待完整求解器發布。'};</script></body></html>
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#173934"><meta name="color-scheme" content="light"><title>高度對位求解器｜灑水頭螺紋接管</title>
+<style>:root{--ink:#173934;--text:#273b38;--muted:#697973;--paper:#f4f6f3;--white:#fff;--line:#dce4df;--accent:#176c59;--accent-bg:#e7f2ec;--amber:#9b5b15;--amber-bg:#fff5e6;--red:#b04e3e;--red-bg:#fff0eb;--shadow:0 12px 36px #17393409;--radius:18px;--safe:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;background:var(--paper);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;font-size:16px;line-height:1.55;-webkit-text-size-adjust:100%}button,input,select,textarea{font:inherit}button,a,input,select,summary{-webkit-tap-highlight-color:transparent}button{cursor:pointer;touch-action:manipulation}button:disabled{opacity:.48;cursor:not-allowed}a{color:var(--accent)}input,select,textarea{width:100%;min-width:0;background:#fff;border:1px solid #cbd7d0;border-radius:10px;min-height:48px;padding:10px 12px;color:var(--text);font-size:16px}input[type=number]{font-variant-numeric:tabular-nums}input[type=checkbox]{width:21px;min-height:21px;height:21px;accent-color:var(--accent);flex:none}input[type=range]{padding:8px 0;accent-color:var(--accent);background:transparent;border:0;width:100%;min-height:42px}input:focus,select:focus,textarea:focus{outline:2px solid #68a998;outline-offset:2px}button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #68a998;outline-offset:3px}.num{font-variant-numeric:tabular-nums;letter-spacing:-.02em}.muted,.help{color:var(--muted)}.help{font-size:13px;line-height:1.65;margin:7px 0 0}.small{font-size:13px}h1,h2,h3,p{margin:0}h1{font-size:21px;line-height:1.3;font-weight:750;letter-spacing:-.025em}h2{font-size:23px;letter-spacing:-.025em;line-height:1.35}h3{font-size:17px;line-height:1.45}p+p{margin-top:12px}.topbar{background:var(--white);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}.topinner{max-width:1200px;margin:auto;display:flex;align-items:center;gap:13px;padding:17px 28px;min-height:79px}.brand-icon{height:38px;width:38px;display:grid;place-items:center;background:var(--ink);color:white;border-radius:11px;flex-shrink:0}.brand-sub{font-size:12px;color:var(--muted);margin-top:3px}.tools{margin-left:auto;display:flex;align-items:center;gap:8px}.icon{display:inline-flex;vertical-align:middle;align-items:center;justify-content:center;flex:none}.icon svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.btn{border:1px solid var(--line);background:white;border-radius:10px;color:var(--ink);padding:10px 15px;min-height:46px;font-size:14px;font-weight:650;display:inline-flex;align-items:center;justify-content:center;gap:8px;line-height:1.3;text-decoration:none}.btn.primary{background:var(--ink);border-color:var(--ink);color:white}.btn.soft{background:var(--accent-bg);border-color:var(--accent-bg);color:var(--accent)}.btn.danger{color:var(--red)}.btn.tiny{min-height:40px;padding:8px 11px;font-size:13px}.btn.icononly{padding:10px;width:46px}.btn.wide{width:100%}.btn:hover:not(:disabled){filter:brightness(.97)}.textbtn{background:none;border:0;color:var(--accent);font-size:14px;padding:10px 4px;font-weight:650;min-height:44px}.shell{max-width:1200px;margin:auto;padding:22px 28px 55px}.subbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}.project-name{font-size:14px;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.status-dot{width:7px;height:7px;background:#94a398;border-radius:50%;display:inline-block;margin-right:7px}.tabs{display:flex;gap:5px;padding:5px;background:#e8ede8;border-radius:12px}.tab{border:0;border-radius:9px;background:transparent;color:var(--muted);font-size:14px;font-weight:650;min-height:40px;padding:8px 20px;display:flex;align-items:center;justify-content:center;gap:7px}.tab.active{background:#fff;color:var(--ink);box-shadow:0 2px 6px #1739340b}.tab .icon{display:none}.notice{border:1px solid #eadac1;background:var(--amber-bg);border-radius:12px;color:#7c561f;padding:12px 16px;display:flex;align-items:flex-start;gap:10px;margin-bottom:20px;font-size:13px;line-height:1.65}.notice .notice-text{flex:1;min-width:0}.notice strong{font-weight:700}.notice .textbtn{padding:0;min-height:0;color:#7c561f;white-space:nowrap;margin:1px 0 0 8px}.view{display:none}.view.active{display:block}.sectionhead{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin:4px 0 20px}.sectionhead p{font-size:14px;color:var(--muted);margin-top:7px;max-width:620px}.eyenum{color:var(--accent);font-size:13px;font-weight:700;margin-right:10px;vertical-align:middle}.panel{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}.pad{padding:24px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.span2{grid-column:1/-1}.field label{display:block;font-size:14px;font-weight:600;margin-bottom:7px}.field label .muted{font-weight:400}.input-unit{position:relative}.input-unit input{padding-right:46px}.input-unit .unit{position:absolute;right:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;pointer-events:none}.input-unit.big input{font-size:25px;font-weight:650;min-height:63px;padding-left:15px;color:var(--ink)}.field .readonly{background:var(--paper)}.rule{height:1px;background:var(--line);margin:22px 0}.inline{display:flex;align-items:center;gap:9px}.between{display:flex;align-items:center;justify-content:space-between;gap:10px}.wrap{flex-wrap:wrap}.toggle{display:flex;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:4px;gap:4px}.toggle button{border:0;background:none;flex:1;border-radius:7px;padding:10px 8px;min-height:43px;font-size:14px;font-weight:650;color:var(--muted)}.toggle button.active{background:var(--white);color:var(--ink);box-shadow:0 1px 4px #17393415}.info-block{padding:16px 18px;border-left:3px solid #7faa98;background:#f1f7f3;border-radius:0 9px 9px 0;font-size:14px;line-height:1.75}.info-block.warn{background:var(--amber-bg);border-color:#d3a161}.step-item{display:flex;gap:13px;margin:18px 0}.step-item .stepnum{border:1px solid var(--line);border-radius:50%;width:27px;height:27px;display:grid;place-items:center;font-size:13px;font-weight:700;flex:none}.step-item p{font-size:14px;margin-top:4px;color:var(--muted)}.inline-select{width:auto;min-height:42px;padding:6px 28px 6px 10px;max-width:220px;font-size:14px}.joint-card{margin-bottom:12px;border:1px solid var(--line);background:white;border-radius:14px;overflow:hidden}.joint-card summary{list-style:none;display:flex;align-items:center;gap:13px;padding:17px 18px;cursor:pointer;min-height:77px}.joint-card summary::-webkit-details-marker{display:none}.joint-no{width:33px;height:33px;display:grid;place-items:center;background:var(--accent-bg);border-radius:10px;font-size:14px;color:var(--accent);font-weight:750;flex:none}.joint-title{flex:1;min-width:0}.joint-title strong{display:block;font-size:15px}.joint-title small{display:block;color:var(--muted);font-size:12px;margin-top:4px}.chevron{transition:transform .18s}.joint-card[open] .chevron{transform:rotate(180deg)}.joint-body{border-top:1px solid var(--line);padding:20px}.joint-body .formgrid{gap:15px}.joint-body label{font-size:13px}.joint-body .meta{background:var(--paper);padding:12px;border-radius:10px;margin-top:15px;font-size:13px;color:var(--muted)}.layout-result{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,1fr);gap:20px;align-items:start}.drawing-panel{position:sticky;top:103px}.drawing-head{padding:17px 20px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}.drawing-head h3{font-size:15px}.drawing-label{font-size:12px;color:var(--muted)}.diagram{background:#fbfcfa;position:relative}.diagram svg{display:block;width:100%;height:auto;max-height:410px}.diagram text{font-family:inherit}.legend{display:flex;align-items:center;gap:17px;justify-content:center;font-size:12px;color:var(--muted);padding:0 12px 17px;background:#fbfcfa}.key{width:16px;height:3px;display:inline-block;margin-right:5px;vertical-align:middle;background:var(--accent)}.key.target{background:#b25443}.key.baseline{background:#aab6ae}.result-stack{display:grid;gap:17px}.result-main{padding:22px 24px}.result-state{font-size:14px;font-weight:700;display:flex;gap:8px;align-items:center;color:var(--accent)}.result-state.fail{color:var(--red)}.result-state.warn{color:var(--amber)}.result-big{margin:9px 0 2px;font-size:44px;font-weight:720;letter-spacing:-.045em;line-height:1.17;color:var(--ink)}.result-big .unit{font-size:17px;font-weight:500;letter-spacing:0;margin-left:4px}.result-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-top:8px}.readout-row{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);margin-top:18px;padding-top:15px;gap:16px}.readout-row .label{font-size:12px;color:var(--muted);margin-bottom:3px}.readout-row strong{font-size:17px;font-weight:650}.rangebox{border-top:1px solid var(--line);padding:14px 20px 19px}.rangebox .between{font-size:12px;color:var(--muted)}.range-svg{display:block;width:100%;height:auto;min-height:70px}.note-mini{font-size:12px;line-height:1.7;color:var(--muted);margin-top:8px}.data-table{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed}.data-table th{text-align:left;color:var(--muted);font-weight:500;font-size:12px;padding:0 0 10px;border-bottom:1px solid var(--line)}.data-table td{padding:12px 0;vertical-align:middle;border-bottom:1px solid #edf0eb}.data-table tr:last-child td{border:0}.data-table .right{text-align:right}.data-table small{font-size:11px;color:var(--muted);display:block;margin-top:3px}.turnnum{font-size:18px;font-weight:700;color:var(--ink)}.margin-track{height:4px;background:#e9eee9;border-radius:6px;margin-top:5px;position:relative}.margin-track i{height:8px;width:4px;border-radius:4px;background:var(--accent);position:absolute;top:-2px}.result-list-head{padding-bottom:17px}.callout{background:var(--amber-bg);border:1px solid #ecd7b8;padding:13px 15px;border-radius:11px;color:#785120;font-size:13px;line-height:1.65}.callout.red{background:var(--red-bg);border-color:#f0d0c5;color:#923f32}.callout.good{background:var(--accent-bg);border-color:#c8dfd1;color:#285e4a}.formula{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--paper);padding:14px 15px;border-radius:10px;margin-top:12px}.disclosure>summary{font-size:14px;font-weight:650;cursor:pointer;min-height:44px;padding:9px 0}.disclosure+.disclosure{border-top:1px solid var(--line);margin-top:8px}.suggestion{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}.suggestion:last-child{border:0}.suggestion .content{flex:1}.suggestion .length{font-size:22px;color:var(--ink);font-weight:700}.suggestion .length span{font-size:13px;font-weight:400}.suggestion .detail{font-size:12px;color:var(--muted);line-height:1.6;margin-top:2px}.suggestion .tag{font-size:11px;color:var(--accent);margin-left:8px}.length-range{font-size:13px;color:var(--muted);line-height:1.8;max-height:120px;overflow:auto}.preview-fields{display:flex;gap:10px;background:white;border-bottom:1px solid var(--line);padding:16px 20px}.preview-fields .item{flex:1}.preview-fields small{display:block;color:var(--muted);font-size:11px}.preview-fields strong{font-size:18px;color:var(--ink);font-weight:650}.manual-row{border-bottom:1px solid var(--line);padding:19px 0}.manual-row:first-child{padding-top:0}.manual-row:last-child{border:0;padding-bottom:0}.manual-controls{display:flex;align-items:center;gap:8px;margin-top:12px}.manual-controls .btn{width:44px;flex:none;padding:0;font-size:20px}.manual-controls input{flex:1;min-width:0;text-align:center;font-weight:650}.manual-info{font-size:12px;color:var(--muted);margin-top:4px}.manual-hero{padding:20px 24px;border-bottom:1px solid var(--line)}.manual-hero .result-big{font-size:37px}.footer-note{font-size:12px;color:var(--muted);text-align:center;margin-top:27px;line-height:1.7}.storage-note{font-size:11px;color:var(--muted);text-align:right;margin-top:8px}.dialog-backdrop{position:fixed;inset:0;background:#132e2966;z-index:100;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}.dialog-backdrop.open{display:flex}.dialog-box{background:#fff;border-radius:20px;max-width:670px;width:100%;max-height:88dvh;overflow:auto;box-shadow:0 20px 80px #10292333}.dialog-title{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:19px 24px;border-bottom:1px solid var(--line);position:sticky;top:0;background:white;z-index:1}.dialog-content{padding:23px 24px}.dialog-content h3{margin:20px 0 9px}.dialog-content h3:first-child{margin-top:0}.dialog-content p{font-size:14px;color:#50665d;line-height:1.8}.dialog-content ol{padding-left:23px;font-size:14px;color:#50665d;line-height:1.85}.dialog-content code{background:var(--paper);padding:2px 4px;border-radius:4px;font-size:13px}.dialog-content textarea{min-height:240px;font-family:ui-monospace,monospace;font-size:12px}.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;background:var(--ink);color:white;border-radius:12px;padding:13px 20px;font-size:14px;z-index:150;max-width:90%;width:max-content;transition:.2s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}#boot{max-width:650px;margin:40px auto;padding:25px;background:white;border:1px solid var(--line);border-radius:14px}.ready #boot{display:none}.empty-state{padding:34px 25px;line-height:1.8}.empty-state h3{color:var(--red);margin-bottom:12px}.error-list{white-space:pre-line;font-size:14px}.testline{padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}.testline.pass{color:var(--accent)}.testline.fail{color:var(--red)}.checkpoint{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--muted);margin-top:16px}.checkpoint input{margin:2px 0 0}.badge-data{font-size:11px;font-weight:600;padding:3px 7px;border-radius:5px;background:#f1ede3;color:#846434;white-space:nowrap}.chip{display:inline-flex;align-items:center;font-size:12px;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:4px 7px}.mobile-only{display:none}.solve-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:21px}.sticky-action{margin-top:20px}.topline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.understate{margin-top:12px}.range-summary{font-size:12px;color:var(--muted);padding:0 20px 16px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(min-width:850px){.goal-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.8fr);gap:24px;align-items:start}.joint-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.8fr);gap:24px;align-items:start}.joint-guide{position:sticky;top:104px}.edit-group{display:grid;grid-template-columns:1fr 1fr;gap:13px}.edit-group .span2{grid-column:1/-1}}
+@media(max-width:849px){.topinner{padding:13px 18px;min-height:72px}.brand-icon{width:34px;height:34px;border-radius:10px}.shell{padding:18px 18px calc(95px + var(--safe))}.tabs{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#ffffffee;border-top:1px solid var(--line);border-radius:0;padding:7px 10px calc(7px + var(--safe));backdrop-filter:blur(14px);gap:0;justify-content:space-around}.tab{flex:1;flex-direction:column;gap:3px;min-height:52px;padding:5px 6px;font-size:11px;font-weight:600;max-width:140px}.tab .icon{display:inline-flex}.tab .icon svg{height:21px;width:21px}.tab.active{background:var(--accent-bg);box-shadow:none;color:var(--accent)}.subbar{margin-bottom:13px}.notice{margin-bottom:19px;padding:11px 12px;gap:8px;font-size:12px}.notice .textbtn{font-size:12px;margin-left:1px}.desktop-only{display:none!important}.mobile-only{display:initial}.sectionhead{margin-bottom:17px}.sectionhead p{font-size:13px;margin-top:6px}h2{font-size:22px}.layout-result{grid-template-columns:1fr;gap:17px}.drawing-panel{position:static}.result-stack{gap:15px}.diagram svg{max-height:355px}.pad{padding:20px}.goal-layout,.joint-layout{display:grid;gap:18px}.result-big{font-size:39px}.result-main{padding:20px}.drawing-head{padding:15px 18px 12px}.result-list-head{padding-bottom:13px}.preview-fields{padding:12px 18px}.preview-fields strong{font-size:17px}.grid2{grid-template-columns:1fr}.toast{bottom:calc(94px + var(--safe))}.formgrid{gap:16px 12px}.joint-body{padding:17px}.joint-card summary{padding:15px}.joint-body .formgrid{gap:14px 11px}.joint-guide{order:2}.dialog-backdrop{padding:12px}.dialog-box{max-height:90dvh;border-radius:16px}.dialog-title{padding:15px 18px}.dialog-content{padding:19px 18px}.tools .btn{font-size:13px}.tools{gap:5px}.tools .btn.tiny{padding:7px 10px}.brand-sub{font-size:11px}h1{font-size:19px}.field label{font-size:13px}.btn{font-size:14px}.formgrid .field{min-width:0}.sectionhead .btn{padding:8px 10px;min-height:40px;font-size:12px}.solve-actions .btn{flex:1}.result-stack .panel:last-child{margin-bottom:0}}
+@media(max-width:360px){.shell{padding-left:13px;padding-right:13px}.topinner{padding-left:13px;padding-right:13px;gap:9px}h1{font-size:17px}.brand-icon{width:31px;height:31px}.tools .btn.tiny{font-size:12px;padding:6px 8px}.pad{padding:17px}.input-unit.big input{font-size:23px}.notice .textbtn{display:none}.formgrid{gap:13px 10px}.field label{font-size:12px}.subbar{gap:6px}.result-big{font-size:35px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media print{body{background:white;font-size:12px}.topbar{position:static}.tools,.tabs,.notice,.footer-note,.no-print,.solve-actions{display:none!important}.shell{padding:15px;max-width:none}.subbar{margin:0 0 10px}.view{display:none!important}#view-result{display:block!important}.drawing-panel{position:static}.layout-result{grid-template-columns:.9fr 1.1fr;gap:14px}.panel{box-shadow:none;break-inside:avoid}.result-stack{gap:10px}.pad{padding:16px}.dialog-backdrop{display:none!important}.result-big{font-size:32px}.sectionhead .btn{display:none}.diagram svg{max-height:300px}.badge-data{border:1px solid #aaa}.range-svg{min-height:50px}.result-desc,.help,.note-mini{font-size:11px}.print-note{display:block!important;color:#333;margin-top:20px;font-size:11px}}
+
+/* Small-screen hierarchy and input legibility refinements. */
+.btn{white-space:nowrap}.sectionhead>.btn{flex-shrink:0}.sectionhead>.inline-select{width:122px;flex:0 0 122px}.data-table td{overflow-wrap:anywhere}
+@media(max-width:849px){#view-result .result-stack{display:contents}#view-result .result-main{order:-2}#view-result .drawing-panel{order:-1}.sectionhead>div{min-width:0}.sectionhead>.btn{white-space:nowrap}#view-goal .formgrid>.field:not(.span2)>label{min-height:40px}.joint-title strong{overflow-wrap:anywhere}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="topinner"><div class="brand-icon" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h9v11M3 4v8M6 17h13M9 21h6M18 3v9M15 6h6"/><circle cx="12" cy="17" r="2.5" fill="#173934"/></svg></div><div><h1>高度對位求解器</h1><div class="brand-sub">灑水頭・螺紋接管</div></div><div class="tools"><button class="btn tiny" data-action="save-menu">保存</button><button class="btn icononly tiny" data-action="help" aria-label="使用說明">?</button></div></div></header>
+<div id="boot"><h2>這是一份可互動的 HTML 工具</h2><p style="margin-top:12px">正在啟動計算核心。若一直停在此處，可能正在使用不執行 JavaScript 的檔案預覽。</p><p>請用能執行 HTML / JavaScript 的瀏覽器開啟。iPhone 的「檔案預覽」不等於完整網頁；也可將 ZIP 內的 index.html 部署為靜態網頁後開啟。</p><noscript><p><strong>目前 JavaScript 未啟用，無法進行計算。</strong></p></noscript></div>
+<main class="shell" id="app" style="display:none"><div class="subbar"><div class="project-name" id="project-name"></div><nav class="tabs" aria-label="工作步驟"><button class="tab" data-view="goal"></button><button class="tab" data-view="joints"></button><button class="tab" data-view="result"></button><button class="tab" data-view="manual"></button></nav><span class="badge-data" id="data-badge"></span></div><div id="notice"></div><section class="view" id="view-goal" aria-label="尺寸與目標"></section><section class="view" id="view-joints" aria-label="接頭限制"></section><section class="view" id="view-result" aria-label="求解結果"></section><section class="view" id="view-manual" aria-label="試轉模擬"></section><div class="footer-note">尺寸幾何試算，不是消防設計、密封或施工合格證明。<br>所有資料留在此瀏覽器；保存 HTML 可另存目前設定。</div><div class="print-note" style="display:none">幾何分析範圍：固定軸向下的螺紋吃入量；不含任意 3D 轉向、碰撞、扭矩、密封、施工順序與消防驗收。示例不代表現場規格。</div></main>
+<div class="dialog-backdrop" id="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-heading"><div class="dialog-box"><div class="dialog-title"><h3 id="dialog-heading"></h3><button class="btn icononly" data-action="close-dialog" aria-label="關閉對話框">×</button></div><div class="dialog-content" id="dialog-content"></div></div></div><div class="toast" id="toast" role="status"></div><input type="file" id="import-file" accept="application/json,.json" hidden>
+<script id="seed-data" type="application/json">null</script>
+<script>/* Thread Height Solver 1.0 — pure deterministic geometry core; lengths in mm.
+   Fixed world-axis model only. This is not a torque, sealing, or fire-code model. */
+(function(root){
+'use strict';
+const EPS=1e-8, MAX_INTERVALS=12000, MAX_PRODUCTS=800000;
+class ModelError extends Error { constructor(message,kind='invalid'){super(message);this.kind=kind;} }
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const dir=d=>({down:1,up:-1,horizontal:0}[d]);
+const finite=x=>typeof x==='number'&&Number.isFinite(x);
+function validate(s){
+ const e=[];
+ for(const k of ['reference','target','tolerance','uncertainty']) if(!finite(s[k])) e.push('請填寫完整的尺寸與誤差數值。');
+ if(s.reference<=0||s.target<=0) e.push('基準下垂距離與目標距離必須大於 0。');
+ if(s.tolerance<0||s.uncertainty<0)e.push('允許誤差與不確定量不能小於 0。');
+ if(!['adjustable','uncertain'].includes(s.strategy))e.push('求解方式無效。');
+ if(!s.joints||s.joints.length<1||s.joints.length>12)e.push('請使用 1～12 個接點。');
+ for(const [i,j] of (s.joints||[]).entries()){
+  const n=j.name||('接點 '+(i+1));
+  if(!['down','up','horizontal'].includes(j.axis))e.push(n+'：軸向無效。');
+  if(!['continuous','phase','fixed'].includes(j.mode))e.push(n+'：限制模式無效。');
+  for(const k of ['pitch','min','max','ref','phase','fixed'])if(!finite(j[k]))e.push(n+'：數值未填完整。');
+  if(j.pitch<=0||j.pitch>100)e.push(n+'：導程須大於 0 且不超過 100 mm／圈。');
+  if(j.min>j.max)e.push(n+'：下限不可大於上限。');
+  if(j.max-j.min>60)e.push(n+'：此版每個接點最多分析 60 圈寬的範圍。');
+  if(Math.abs(j.min)>10000||Math.abs(j.max)>10000||Math.abs(j.ref)>10000)e.push(n+'：圈數過大，請重新定義零位。');
+ }
+ const l=s.length;
+ if(!l)e.push('缺少改管長資料。'); else {
+  for(const k of ['original','trial','min','max','step']) if(!finite(l[k]))e.push('改管長欄位未填完整。');
+  if(l.original<=0||l.trial<=0||l.min<=0||l.max<l.min||l.step<=0)e.push('管長與步距須大於 0，且管長上限不可小於下限。');
+  if(!['down','up','horizontal'].includes(l.axis))e.push('改管段的軸向無效。');
+ }
+ if(e.length)throw new ModelError([...new Set(e)].join('\n'));
+}
+function merge(intervals){
+ if(!intervals.length)return [];
+ intervals.sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+ const out=[];let cur=intervals[0].slice();
+ for(let i=1;i<intervals.length;i++){
+  const v=intervals[i];
+  if(v[0]<=cur[1]+EPS)cur[1]=Math.max(cur[1],v[1]);
+  else {out.push(cur);cur=v.slice();}
+ }
+ out.push(cur);
+ if(out.length>MAX_INTERVALS)throw new ModelError('離散高度區間超過此版運算上限；尚未完成判斷。請減少相位接點或縮小圈數範圍。','complexity');
+ return out;
+}
+function convolve(a,b){
+ if(a.length*b.length>MAX_PRODUCTS)throw new ModelError('方向組合過多；尚未完成判斷。請拆分固定部分，或縮小允許圈數。','complexity');
+ const r=[];for(const x of a)for(const y of b)r.push([x[0]+y[0],x[1]+y[1]]);return merge(r);
+}
+function domain(j,margin=0){
+ const w=j.max-j.min;
+ const lo=j.mode==='fixed'?j.min:j.min+w*margin;
+ const hi=j.mode==='fixed'?j.max:j.max-w*margin;
+ const a=-dir(j.axis)*j.pitch;
+ const contribution=n=>a*(n-j.ref);
+ if(j.mode==='continuous'){
+  if(lo>hi+EPS)return {j,values:[],intervals:[],a,lo,hi};
+  return {j,values:null,intervals:[[Math.min(contribution(lo),contribution(hi)),Math.max(contribution(lo),contribution(hi))]],a,lo,hi};
+ }
+ let values=[];
+ if(j.mode==='fixed'){
+  if(j.fixed>=lo-EPS&&j.fixed<=hi+EPS)values=[j.fixed];
+ } else {
+  const phase=((j.phase%1)+1)%1;
+  const k0=Math.ceil(lo-phase-EPS),k1=Math.floor(hi-phase+EPS);
+  for(let k=k0;k<=k1;k++)values.push(phase+k);
+ }
+ return {j,values,intervals:merge(values.map(n=>[contribution(n),contribution(n)])),a,lo,hi};
+}
+function build(joints,margin=0){
+ const domains=joints.map(j=>domain(j,margin));
+ const suffix=Array(domains.length+1);suffix[domains.length]=[[0,0]];
+ for(let i=domains.length-1;i>=0;i--)suffix[i]=convolve(domains[i].intervals,suffix[i+1]);
+ return {domains,suffix,intervals:suffix[0]};
+}
+function intersects(intervals,lo,hi){return intervals.some(v=>v[1]>=lo-EPS&&v[0]<=hi+EPS);}
+function nearest(intervals,value,lo=-Infinity,hi=Infinity){
+ let best=null,dist=Infinity;
+ for(const [a,b] of intervals){const l=Math.max(a,lo),h=Math.min(b,hi);if(l>h+EPS)continue;
+  const n=clamp(value,l,h),d=Math.abs(n-value);if(d<dist){best=n;dist=d;}}
+ return best;
+}
+function reconstruct(b,total){
+ const out=[];let remain=total;
+ for(let i=0;i<b.domains.length;i++){
+  const d=b.domains[i],mid=(d.j.min+d.j.max)/2;let best=null,bestDist=Infinity;
+  const consider=n=>{const val=d.a*(n-d.j.ref),delta=Math.abs(n-mid);if(delta<bestDist){best=n;bestDist=delta;}};
+  if(d.values){for(const n of d.values){const val=d.a*(n-d.j.ref);if(intersects(b.suffix[i+1],remain-val,remain-val))consider(n);}}
+  else if(Math.abs(d.a)<EPS){if(intersects(b.suffix[i+1],remain,remain))consider(clamp(mid,d.lo,d.hi));}
+  else {
+   for(const [sl,sh] of b.suffix[i+1]){
+    const v0=(remain-sh)/d.a+d.j.ref,v1=(remain-sl)/d.a+d.j.ref;
+    const lo=Math.max(d.lo,Math.min(v0,v1)),hi=Math.min(d.hi,Math.max(v0,v1));
+    if(lo<=hi+EPS)consider(clamp(mid,lo,hi));
+   }
+  }
+  if(best===null)throw new ModelError('數值重建失敗，未輸出裝配方案。請放寬極小容差後重試。','numeric');
+  out.push(best);remain-=d.a*(best-d.j.ref);
+ }
+ if(Math.abs(remain)>1e-5)throw new ModelError('數值殘差過大，未輸出裝配方案。','numeric');
+ return out;
+}
+function contribution(j,n){return -dir(j.axis)*j.pitch*(n-j.ref);}
+function base(s,L=s.length.trial){return s.reference+dir(s.length.axis)*(L-s.length.original);}
+function position(s,turns,L=s.length.trial){return base(s,L)+s.joints.reduce((a,j,i)=>a+contribution(j,turns[i]),0);}
+function minMargin(joints,turns){
+ let m=.5,has=false;
+ joints.forEach((j,i)=>{if(j.mode!=='fixed'&&j.max>j.min+EPS){has=true;m=Math.min(m,(turns[i]-j.min)/(j.max-j.min),(j.max-turns[i])/(j.max-j.min));}});
+ return has?Math.max(0,m):null;
+}
+function optimize(s,L,b0,lo,hi){
+ const B=base(s,L);let l=lo-B,h=hi-B;
+ if(!intersects(b0.intervals,l,h))return null;
+ let exact=nearest(b0.intervals,s.target-B,l,h);
+ if(s.objective==='center'){l=exact;h=exact;}
+ let low=0,high=.5;
+ // Monotonic feasibility: shrinking every free domain cannot create a new solution.
+ for(let k=0;k<34;k++){const m=(low+high)/2,b=build(s.joints,m);if(intersects(b.intervals,l,h))low=m;else high=m;}
+ const b=build(s.joints,Math.max(0,low-1e-8));
+ exact=nearest(b.intervals,s.target-B,l,h);
+ if(exact===null)throw new ModelError('餘量搜尋未能穩定收斂；未輸出圈數。','numeric');
+ const turns=reconstruct(b,exact),D=position(s,turns,L);
+ return {turns,D,error:D-s.target,margin:minMargin(s.joints,turns),L,range:[D-s.uncertainty,D+s.uncertainty],guaranteed:D-s.uncertainty>=s.target-s.tolerance-EPS&&D+s.uncertainty<=s.target+s.tolerance+EPS};
+}
+function solve(s,L=s.length.trial,provided=null){
+ validate(s);const b=provided||build(s.joints),B=base(s,L);
+ const empty=b.domains.map((d,i)=>d.intervals.length?null:i).filter(x=>x!==null);
+ if(empty.length)return {kind:'domain-empty',empty,intervals:[],b};
+ const intervals=b.intervals.map(v=>[v[0]+B,v[1]+B]);
+ const min=intervals[0][0],max=intervals[intervals.length-1][1];
+ if(min<=0)throw new ModelError('模型包含灑水頭到達固定基準上方的狀態（D ≤ 0）。請檢查基準、方向或允許範圍。');
+ const low=s.target-s.tolerance,high=s.target+s.tolerance;
+ const range=[min-s.uncertainty,max+s.uncertainty];
+ const guarantee=range[0]>=low-EPS&&range[1]<=high+EPS;
+ if(s.strategy==='uncertain')return {kind:guarantee?'robust':'not-robust',intervals,min,max,range,guarantee,b,requiredTolerance:(max-min)/2+s.uncertainty};
+ const candidate=optimize(s,L,b,low,high);
+ if(candidate)return {kind:'feasible',candidate,intervals,min,max,range,b};
+ const closest=nearest(b.intervals,s.target-B)+B;
+ const close=optimize(s,L,b,closest,closest);
+ return {kind:'infeasible',reason:s.target>=min-EPS&&s.target<=max+EPS?'gap':'outside',closest:close,intervals,min,max,range,b};
+}
+function lengthAdvice(s,result){
+ const q=dir(s.length.axis),l=s.length;
+ if(!q)return {kind:'horizontal',ranges:[],suggestions:[]};
+ if(result.kind==='domain-empty')return {kind:'domain-empty',ranges:[],suggestions:[]};
+ const b=result.b||build(s.joints);if(!b.intervals.length)return {kind:'domain-empty',ranges:[],suggestions:[]};
+ let ranges=[];
+ if(s.strategy==='uncertain'){
+  const mn=s.reference+b.intervals[0][0]-s.uncertainty,mx=s.reference+b.intervals[b.intervals.length-1][1]+s.uncertainty;
+  const low=s.target-s.tolerance-mn,high=s.target+s.tolerance-mx;
+  if(low>high+EPS)return {kind:'width',ranges:[],suggestions:[],requiredTolerance:(mx-mn)/2};
+  ranges=[[l.original+Math.min(low/q,high/q),l.original+Math.max(low/q,high/q)]];
+ } else {
+  ranges=b.intervals.map(([a,z])=>{const low=(s.target-s.tolerance-s.reference-z)/q,high=(s.target+s.tolerance-s.reference-a)/q;return [l.original+Math.min(low,high),l.original+Math.max(low,high)];});
+ }
+ ranges=merge(ranges.map(([a,z])=>[Math.max(l.min,a),Math.min(l.max,z)]).filter(([a,z])=>a<=z+EPS));
+ if(!ranges.length)return {kind:'out-of-bounds',ranges:[],suggestions:[]};
+ const midTurns=b.domains.map(d=>d.values?d.values.reduce((a,z)=>Math.abs(z-(d.j.min+d.j.max)/2)<Math.abs(a-(d.j.min+d.j.max)/2)?z:a):((d.lo+d.hi)/2));
+ const centerD=position(s,midTurns,l.original),ideal=l.original+(s.target-centerD)/q;
+ const values=new Set();
+ for(const [a,z] of ranges){const k0=Math.ceil(a/l.step-EPS),k1=Math.floor(z/l.step+EPS);if(k0>k1)continue;
+  const add=k=>values.add(Number((clamp(k,k0,k1)*l.step).toFixed(9)));
+  [ideal,l.original,l.trial,(a+z)/2].forEach(v=>{add(Math.floor(v/l.step));add(Math.ceil(v/l.step));});add(k0);add(k1);
+ }
+ if(!values.size)return {kind:'grid',ranges,suggestions:[]};
+ // The reachable ranges are exact. Recommendation rows are representative, not exhaustive.
+ const candidates=[...values].sort((a,z)=>Math.abs(a-ideal)-Math.abs(z-ideal)||Math.abs(a-l.original)-Math.abs(z-l.original)).slice(0,10);
+ const suggestions=[];
+ for(const L of candidates){const r=solve(s,L,b);if(r.kind==='feasible')suggestions.push({...r.candidate,delta:L-l.original});else if(r.kind==='robust')suggestions.push({L,delta:L-l.original,D:(r.range[0]+r.range[1])/2,range:r.range,error:(r.range[0]+r.range[1])/2-s.target,margin:null});}
+ suggestions.sort((a,z)=>(z.margin??0)-(a.margin??0)||Math.abs(a.error)-Math.abs(z.error)||Math.abs(a.delta)-Math.abs(z.delta));
+ return {kind:'ok',ranges,suggestions:suggestions.slice(0,3),ideal};
+}
+root.ThreadEngine={EPS,ModelError,clamp,dir,validate,merge,domain,build,base,contribution,position,minMargin,solve,lengthAdvice};
+if(typeof module!=='undefined'&&module.exports)module.exports=root.ThreadEngine;
+})(typeof window!=='undefined'?window:globalThis);
+</script>
+<script>(function(root){
+'use strict';
+const E=root.ThreadEngine||(typeof require!=='undefined'?require('./engine.js'):null);
+const clone=o=>JSON.parse(JSON.stringify(o));
+function fixture(){const j={name:'接點',pitch:2,min:1,max:2,ref:0,axis:'down',mode:'continuous',phase:1.25,fixed:1.5};return {reference:300,target:294,tolerance:.5,uncertainty:0,strategy:'adjustable',objective:'margin',joints:[{...j},{...j}],length:{original:200,trial:200,min:100,max:350,step:1,axis:'down'}};}
+function run(){const tests=[],assert=(x,m='條件不成立')=>{if(!x)throw new Error(m);},near=(a,b,tol=1e-5)=>assert(Math.abs(a-b)<=tol,`${a} ≠ ${b}`),test=(name,fn)=>{try{fn();tests.push({name,pass:true});}catch(e){tests.push({name,pass:false,error:e.message});}};
+ test('直管可達範圍 292～296 mm',()=>{const r=E.solve(fixture());near(r.min,292);near(r.max,296);assert(r.kind==='feasible');});
+ test('中點解：兩處各 1.5 圈，到達 294 mm',()=>{const c=E.solve(fixture()).candidate;c.turns.forEach(n=>near(n,1.5));near(c.D,294);near(c.margin,.5);});
+ test('目標 298 mm：原管長無解',()=>{const s=fixture();s.target=298;const r=E.solve(s);assert(r.kind==='infeasible');near(r.closest.D,296);assert(r.reason==='outside');});
+ test('反推長度：原 200 改為 204 mm',()=>{const s=fixture();s.target=298;const a=E.lengthAdvice(s,E.solve(s));assert(a.kind==='ok');near(a.suggestions[0].L,204);near(a.suggestions[0].D,298);});
+ test('相位限定只能選 1.25、2.25 圈',()=>{const j=fixture().joints[0];j.mode='phase';j.max=2.5;assert(JSON.stringify(E.domain(j).values)==='[1.25,2.25]');});
+ test('離散高度空隙不能誤判為有解',()=>{const s=fixture();s.tolerance=.1;s.joints[0].mode='phase';s.joints[0].max=2.5;s.joints[1].mode='fixed';s.joints[1].fixed=1.25;const r=E.solve(s);assert(r.kind==='infeasible');assert(r.reason==='gap');assert(r.intervals.length===2);near(r.min,293);near(r.max,295);});
+ test('固定值超出允許範圍：無允許裝配狀態',()=>{const s=fixture();s.joints[0].mode='fixed';s.joints[0].fixed=3;assert(E.solve(s).kind==='domain-empty');});
+ test('相位與允許範圍無交集',()=>{const s=fixture();Object.assign(s.joints[0],{mode:'phase',min:1.4,max:1.6,phase:1.25});assert(E.solve(s).kind==='domain-empty');});
+ test('水平接點不改變高度，但仍須符合相位',()=>{const s=fixture();Object.assign(s.joints[0],{axis:'horizontal',mode:'phase',phase:1.25});s.target=297;const r=E.solve(s);near(r.min,296);near(r.max,298);near(r.candidate.turns[0],1.25);});
+ test('向上接點的高度貢獻符號相反',()=>{const s=fixture();s.joints[0].axis='up';s.target=300;const r=E.solve(s);near(r.min,298);near(r.max,302);near(r.candidate.D,300);});
+ test('基準圈數非零時，不重複扣吃入量',()=>{const s=fixture();s.joints.forEach(j=>j.ref=1.5);s.target=300;const r=E.solve(s);near(r.min,298);near(r.max,302);near(r.candidate.D,300);});
+ test('額外誤差超出容差：名義可行但不可保證',()=>{const s=fixture();s.uncertainty=1;const r=E.solve(s);assert(r.kind==='feasible');assert(!r.candidate.guaranteed);});
+ test('最終圈數不確定：全部狀態不能達標',()=>{const s=fixture();s.strategy='uncertain';s.uncertainty=.2;const r=E.solve(s);assert(r.kind==='not-robust');near(r.range[0],291.8);near(r.range[1],296.2);near(r.requiredTolerance,2.2);});
+ test('範圍太寬時，改管長不能消除不確定性',()=>{const s=fixture();s.strategy='uncertain';const a=E.lengthAdvice(s,E.solve(s));assert(a.kind==='width');near(a.requiredTolerance,2);});
+ test('容差完整涵蓋所有最終狀態',()=>{const s=fixture();s.strategy='uncertain';s.tolerance=2;assert(E.solve(s).kind==='robust');});
+ test('不確定模式可反推整體平移管長',()=>{const s=fixture();s.strategy='uncertain';s.tolerance=2.1;s.target=298;const a=E.lengthAdvice(s,E.solve(s));assert(a.kind==='ok');near(a.suggestions[0].L,204);});
+ test('改向上管段：加長會讓末端上移',()=>{const s=fixture();s.length.axis='up';s.length.trial=204;s.target=290;near(E.solve(s).candidate.D,290);});
+ test('改水平管長不提供高度補償',()=>{const s=fixture();s.length.axis='horizontal';const a=E.lengthAdvice(s,E.solve(s));assert(a.kind==='horizontal');});
+ test('連續長度有解但選料步距未命中',()=>{const s=fixture();s.joints.forEach(j=>Object.assign(j,{mode:'fixed',fixed:1.5}));s.target=294.5;s.tolerance=.01;const a=E.lengthAdvice(s,E.solve(s));assert(a.kind==='grid');});
+ test('零容差也能重建精確尺寸解',()=>{const s=fixture();s.target=294.3;s.tolerance=0;const r=E.solve(s);assert(r.kind==='feasible');near(r.candidate.D,294.3,1e-6);});
+ test('先置中與先留餘量：兩種優先序確實不同',()=>{const s=fixture();s.target=294.3;s.tolerance=.5;const a=E.solve(s).candidate;near(a.D,294);s.objective='center';const b=E.solve(s).candidate;near(b.D,294.3);assert(a.margin>b.margin);});
+ test('相同上下限可視為單一狀態',()=>{const s=fixture();s.joints.forEach(j=>{j.min=1.5;j.max=1.5;});const r=E.solve(s);near(r.min,r.max);near(r.candidate.D,294);});
+ test('不合法數字與顛倒上下限不輸出解',()=>{const s=fixture();s.joints[0].min=4;let thrown=false;try{E.solve(s);}catch(e){thrown=true;}assert(thrown);s.joints[0].min=1;s.target=NaN;thrown=false;try{E.solve(s);}catch(e){thrown=true;}assert(thrown);});
+ test('離散區間加總與獨立枚舉的所有高度一致',()=>{const s=fixture();s.joints=Array.from({length:4},(_,i)=>({...s.joints[0],pitch:1.1+i*.3,min:.2,max:3.3,mode:'phase',phase:.25,axis:i===2?'up':'down'}));const b=E.build(s.joints);let brute=[0];for(const j of s.joints){const ns=[.25,1.25,2.25,3.25];brute=brute.flatMap(v=>ns.map(n=>v-E.dir(j.axis)*j.pitch*(n-j.ref)));}for(const v of brute)assert(b.intervals.some(([a,z])=>v>=a-1e-7&&v<=z+1e-7));for(const [a,z] of b.intervals){near(a,z);assert(brute.some(v=>Math.abs(v-a)<1e-7));}});
+ test('十二接點仍可精確求解',()=>{const s=fixture();s.joints=Array.from({length:12},()=>clone(s.joints[0]));s.target=264;const c=E.solve(s).candidate;assert(c.turns.length===12);near(c.D,264);c.turns.forEach(n=>near(n,1.5));});
+ return tests;
+}
+root.ThreadTests={run,fixture};if(typeof module!=='undefined'&&module.exports)module.exports=root.ThreadTests;
+})(typeof window!=='undefined'?window:globalThis);
+</script>
+<script>(function(){
+'use strict';
+const E=window.ThreadEngine,$=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)];
+const icons={goal:'<path d="M4 6h16M4 18h16M7 3v6M7 15v6M17 3v6M17 15v6M7 12h10"/>',joints:'<path d="M6 3v5l6 4 6-4V3M6 21v-5l6-4 6 4v5M3 8h6M15 8h6M3 16h6M15 16h6"/>',result:'<path d="M4 20V4h16M7 14l4-4 4 3 5-7M8 20h12"/>',manual:'<path d="M5 8a8 8 0 1 1-1 8M3 3v6h6M12 7v5l3 2"/>',arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',chevron:'<path d="m6 9 6 6 6-6"/>',check:'<path d="m5 12 4 4L19 6"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/>',save:'<path d="M12 3v12m-4-4 4 4 4-4M4 16v5h16v-5"/>',plus:'<path d="M12 5v14M5 12h14"/>',warn:'<path d="m12 3 10 18H2L12 3Z"/><path d="M12 9v5M12 17h.01"/>',copy:'<rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V3H3v13h5"/>',reset:'<path d="M4 9a8 8 0 1 1-1 6M3 3v6h6"/>'};
+const icon=name=>`<span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24">${icons[name]||icons.info}</svg></span>`;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf=(x,n=3)=>!Number.isFinite(x)?'—':Number(x.toFixed(n)).toLocaleString('en-US',{maximumFractionDigits:n,useGrouping:false});
+const fmtTurn=x=>nf(x,5),sgn=x=>(x>1e-7?'+':'')+nf(x,4);
+let serial=0;const uid=()=>`j${Date.now().toString(36)}${serial++}`;
+const makeJoint=(name='新增接點',extra={})=>({id:uid(),name,pitch:2,min:1,max:2,ref:0,axis:'down',mode:'continuous',phase:1.25,fixed:1.5,manual:1.5,...extra});
+function example(key='straight'){
+ let s={version:1,storageKey:'thread-height-v1-default',name:'直管下接・教學案例',unit:'cm',view:'result',isExample:true,checked:false,evidence:'',referenceLabel:'固定接點基準 → 灑水頭指定對位面',zeroLabel:'自訂記號零位；不是露出牙數',reference:300,target:294,tolerance:.5,uncertainty:0,strategy:'adjustable',objective:'margin',route:'straight',zoom:false,manualStep:.125,joints:[makeJoint('上端螺紋接合'),makeJoint('下端螺紋接合')],length:{original:200,trial:200,min:100,max:350,step:1,axis:'down'}};
+ if(key==='no-solution'){s.name='管長不足・教學案例';s.target=298;}
+ if(key==='phase'){s.name='方向限制產生空隙・教學案例';s.target=294;s.tolerance=.1;s.joints=[makeJoint('彎頭方向限定',{mode:'phase',phase:1.25,max:2.5,manual:1.25}),makeJoint('末端固定接點',{mode:'fixed',fixed:1.25,max:2.5,manual:1.25})];s.route='offset';}
+ if(key==='uncertain'){s.name='有解不代表穩定・教學案例';s.strategy='uncertain';s.uncertainty=.2;}
+ if(key==='offset'){s.name='固定走向多彎頭・教學案例';s.route='offset';s.reference=300;s.target=300;s.joints=[makeJoint('入口向下接點',{axis:'down',mode:'phase',phase:1.25,ref:1.25,manual:1.25}),makeJoint('水平偏移接點',{axis:'horizontal',mode:'phase',phase:1.25,ref:1.25,manual:1.25}),makeJoint('向上回折接點',{axis:'up',mode:'phase',phase:1.25,ref:1.25,manual:1.25}),makeJoint('末端向下接點',{ref:1.5})];}
+ return s;
+}
+let s,computed=null,advice=null,currentError=null,storageOK=true,openJointIds=new Set(),dialogFocus=null;
+try{
+ const seed=JSON.parse($('#seed-data').textContent||'null');s=seed?normalize(seed):example();
+ try{const stored=localStorage.getItem(s.storageKey);if(stored)s=normalize(JSON.parse(stored));}catch(e){storageOK=false;}
+}catch(e){s=example();}
+function normalize(v){
+ if(!v||v.version!==1||!Array.isArray(v.joints))throw new Error('這不是本工具第 1 版的專案檔。');
+ const r=example();
+ for(const k of ['name','evidence','referenceLabel','zeroLabel','storageKey'])if(typeof v[k]==='string')r[k]=v[k].slice(0,k==='evidence'?2000:240);
+ for(const k of ['reference','target','tolerance','uncertainty','manualStep'])if(k in v)r[k]=v[k];
+ for(const k of ['isExample','checked','zoom'])r[k]=!!v[k];
+ r.unit=v.unit==='mm'?'mm':'cm';r.view=['goal','joints','result','manual'].includes(v.view)?v.view:'result';r.strategy=v.strategy;r.objective=v.objective==='center'?'center':'margin';r.route=v.route==='offset'?'offset':'straight';
+ if(!v.length)throw new Error('專案缺少管長資料。');
+ r.length={};for(const k of ['original','trial','min','max','step','axis'])r.length[k]=v.length[k];
+ r.joints=v.joints.map(j=>{const x=makeJoint(String(j.name||'接點').slice(0,100));for(const k of ['pitch','min','max','ref','axis','mode','phase','fixed','manual'])if(k in j)x[k]=j[k];return x;});
+ E.validate(r);return r;
+}
+const U=()=>s.unit,F=()=>s.unit==='cm'?10:1,val=v=>v/F(),dim=(v,n=4)=>nf(val(v),n),unitDim=v=>dim(v)+' '+U();
+function persist(){try{E.validate(s);}catch(e){return;}try{localStorage.setItem(s.storageKey,JSON.stringify(s));storageOK=true;}catch(e){storageOK=false;}}
+function calculate(){computed=null;advice=null;currentError=null;try{computed=E.solve(s);advice=E.lengthAdvice(s,computed);}catch(e){currentError=e;}}
+function setView(v,scroll=true){s.view=v;$$('.view').forEach(el=>el.classList.toggle('active',el.id==='view-'+v));$$('.tab').forEach(el=>{const active=el.dataset.view===v;el.classList.toggle('active',active);el.setAttribute('aria-current',active?'page':'false');});if(v==='manual')updateManual();persist();if(scroll)window.scrollTo({top:0,behavior:'auto'});}
+function field(label,key,value,{unit='',big=false,help='',type='number',step='any',placeholder='',span=false,readonly=false}={}){
+ return `<div class="field ${span?'span2':''}"><label for="f-${esc(key)}">${label}</label><div class="input-unit ${big?'big':''}"><input id="f-${esc(key)}" data-field="${esc(key)}" type="${type}" ${type==='number'?`step="${step}" inputmode="decimal"`:''} value="${esc(type==='number'?(Number.isFinite(value)?nf(value,8):''):value)}" ${readonly?'readonly':''} placeholder="${esc(placeholder)}" autocomplete="off">${unit?`<span class="unit">${unit}</span>`:''}</div>${help?`<p class="help">${help}</p>`:''}</div>`;
+}
+function selectField(label,key,value,options,help='',span=false){return `<div class="field ${span?'span2':''}"><label for="f-${esc(key)}">${label}</label><select id="f-${esc(key)}" data-field="${esc(key)}">${options.map(([v,t])=>`<option value="${esc(v)}" ${v===value?'selected':''}>${esc(t)}</option>`).join('')}</select>${help?`<p class="help">${help}</p>`:''}</div>`;}
+const axisOptions=[['down','向下'],['up','向上'],['horizontal','水平']];
+const axisText=a=>({down:'向下',up:'向上',horizontal:'水平'}[a]||a),modeText=m=>({continuous:'連續可選',phase:'整圈同相位',fixed:'固定圈數'}[m]||m);
+function header(){
+ $('#project-name').innerHTML=`<span class="status-dot"></span>${esc(s.name)}`;
+ $('#data-badge').textContent=s.isExample?'示範數據':(s.checked&&s.evidence.trim()?'現場輸入 · 自行核對':'現場輸入 · 未核對');
+ $('#notice').innerHTML=`<div class="notice">${icon('info')}<div class="notice-text"><strong>${s.isExample?'目前數字是教學示例。':'本工具只判斷尺寸幾何。'}</strong>${s.isExample?'導程與 1～2 圈不是通用施工標準。':'「可達」不代表密封、扭矩或消防驗收合格。'}</div><button class="textbtn" data-action="${s.isExample?'new-project':'help'}">${s.isExample?'換成現場資料':'查看界線'}</button></div>`;
+ const labels={goal:['goal','尺寸'],joints:['joints','接頭'],result:['result','結果'],manual:['manual','試轉']};
+ $$('.tab').forEach(b=>b.innerHTML=icon(labels[b.dataset.view][0])+`<span>${labels[b.dataset.view][1]}</span>`);
+}
+function renderGoal(){
+ $('#view-goal').innerHTML=`<div class="sectionhead"><div><h2>目標要到哪裡？</h2><p>先量同一個基準，再讓接頭的允許範圍決定能否對齊。</p></div><select class="inline-select" data-field="unit" aria-label="尺寸單位"><option value="cm" ${s.unit==='cm'?'selected':''}>公分 cm</option><option value="mm" ${s.unit==='mm'?'selected':''}>毫米 mm</option></select></div>
+ <div class="goal-layout"><div class="panel pad"><div class="formgrid">
+ ${field('固定基準到目標 <span class="muted">D*</span>','target',val(s.target),{unit:U(),big:true,help:'向下為正。這是距離，不是離地標高。'})}
+ ${field('基準狀態的下垂距離 <span class="muted">D₀</span>','reference',val(s.reference),{unit:U(),big:true,help:'各接頭在「基準圈數」時，同一對位面的距離。'})}
+ ${field('允許的對位誤差 ±','tolerance',val(s.tolerance),{unit:U(),help:'輸入 0 表示理論精確對齊。'})}
+ ${field('額外不確定量 ±','uncertainty',val(s.uncertainty),{unit:U(),help:'量測／加工合計的保守上界。不是標準差，不含圈數範圍。'})}
+ ${field('對位的兩個基準','referenceLabel',s.referenceLabel,{type:'text',span:true,help:'例如：原管出口記號 → 灑水頭指定對位面。不要把外殼底部與完成面混用。'})}
+ </div><div class="rule"></div><h3 style="margin-bottom:12px">鎖入範圍代表什麼？</h3><div class="toggle"><button data-strategy="adjustable" class="${s.strategy==='adjustable'?'active':''}">範圍內可選</button><button data-strategy="uncertain" class="${s.strategy==='uncertain'?'active':''}">最終圈數不確定</button></div><p class="help">${s.strategy==='adjustable'?'尋找一組符合圈數、方向與高度的數學方案。':'檢查所有允許的最終圈數，是否都能留在目標誤差內；不輸出「應鎖幾圈」。'}</p>
+ <div class="rule"></div><details class="disclosure"><summary>專案、參考零位與資料來源</summary><div class="formgrid" style="margin-top:12px">${field('位置名稱','name',s.name,{type:'text',span:true})}${field('各圈數共同的紀錄方式','zeroLabel',s.zeroLabel,{type:'text',span:true,help:'圈數需相對各自清楚定義的記號。不是露牙數，也不假定 0 圈＝完全未鎖。'})}${field('規格／允許範圍的資料來源','evidence',s.evidence,{type:'text',span:true,placeholder:'型號、文件頁碼、量測紀錄或確認人'})}</div><label class="checkpoint"><input type="checkbox" data-field="checked" ${s.checked?'checked':''}><span>已自行核對數值與來源（不會由程式認證施工安全）。</span></label></details>
+ <div class="solve-actions"><button class="btn" data-view="joints">設定接頭 ${icon('arrow')}</button><button class="btn primary" data-view="result">查看結果 ${icon('result')}</button></div></div>
+ <div><div class="panel pad"><h3>怎麼量，才不會重複扣掉吃入量？</h3><div class="step-item"><div class="stepnum">1</div><div><strong>同一個基準狀態</strong><p>D₀ 和每個接頭的「基準圈數 n₀」必須對應同一狀態；可以是已知組裝尺寸，不必實際退到零圈。</p></div></div><div class="step-item"><div class="stepnum">2</div><div><strong>只算相對變化</strong><p>公式使用 n − n₀，已經包含在 D₀ 裡的吃入量，不會再次扣除。</p></div></div><div class="step-item"><div class="stepnum">3</div><div><strong>不是改一個接頭就一定有解</strong><p>若高度落在不可達區間，結果會保留接頭限制，反推另一支管長，而不建議用鬆牙湊高度。</p></div></div><button class="btn wide soft" data-action="help">看公式與模型界線</button></div>
+ <div class="panel pad" style="margin-top:18px"><h3>可直接比較的教學案例</h3><p class="help">切換案例會重置目前資料；需要保留時請先保存。</p><select data-example style="margin-top:12px" aria-label="載入教學案例"><option value="">選擇案例…</option><option value="straight">直管有解：30 → 29.4 cm</option><option value="no-solution">管太短：目標 29.8 cm</option><option value="phase">高度在上下界內，卻有方向空隙</option><option value="uncertain">有名義解，但不能穩定達標</option><option value="offset">固定走向：下／水平／上／下</option></select></div></div></div>`;
+}
+function renderJoints(){
+ const cards=s.joints.map((j,i)=>{let d;try{d=E.domain(j);}catch(e){d=null;}
+ const phaseInfo=d&&d.values?(d.values.length?d.values.map(fmtTurn).join('、')+' 圈':'此範圍沒有允許圈數'):'鎖入可以在範圍內連續選擇';
+ return `<details class="joint-card" data-joint-detail="${j.id}" ${openJointIds.has(j.id)?'open':''}><summary><span class="joint-no">${i+1}</span><span class="joint-title"><strong>${esc(j.name)}</strong><small>${axisText(j.axis)} · ${nf(j.pitch)} mm／圈 · ${nf(j.min)}～${nf(j.max)} 圈 · ${modeText(j.mode)}</small></span><span class="chevron">${icon('chevron')}</span></summary><div class="joint-body"><div class="formgrid">
+ ${field('接點名稱',`j.${i}.name`,j.name,{type:'text',span:true})}
+ ${field('每圈前進量（導程）',`j.${i}.pitch`,j.pitch,{unit:'mm/圈',help:'不從照片猜牙規。單線螺紋時才等於牙距。'})}
+ ${field('基準圈數 n₀',`j.${i}.ref`,j.ref,{unit:'圈',help:'量 D₀ 當時，此接點的圈數。'})}
+ ${field('允許下限',`j.${i}.min`,j.min,{unit:'圈'})}${field('允許上限',`j.${i}.max`,j.max,{unit:'圈'})}
+ ${selectField('由上游往下游的軸向',`j.${i}.axis`,j.axis,axisOptions)}
+ ${selectField('方向／固定限制',`j.${i}.mode`,j.mode,[['continuous','連續可選'],['phase','限定朝向'],['fixed','固定圈數']])}
+ ${j.mode==='phase'?field('某次方向正確時的圈數',`j.${i}.phase`,j.phase,{unit:'圈',span:true,help:'例如 1.25，則 0.25、1.25、2.25…同向；再與允許上下限取交集。沒有量測相位時，不可憑外觀假定。'}):''}
+ ${j.mode==='fixed'?field('固定圈數',`j.${i}.fixed`,j.fixed,{unit:'圈',span:true,help:'固定值仍須位於你提供的允許範圍。'}):''}
+ </div><div class="meta">${esc(phaseInfo)}</div><div class="between" style="margin-top:12px"><span class="help">接點 ${i+1} · 各限制由使用者提供</span><button class="btn tiny danger" data-remove="${i}" ${s.joints.length<=1?'disabled':''}>移除此接點</button></div></div></details>`;}).join('');
+ $('#view-joints').innerHTML=`<div class="sectionhead"><div><h2>每個接頭，都有自己的界線</h2><p>鎖得更深會改變尺寸；方向受限的接點，不能當成任意連續旋鈕。</p></div><button class="btn" data-action="add-joint" ${s.joints.length>=12?'disabled':''}>${icon('plus')} 新增</button></div><div class="joint-layout"><div>${cards}<button class="btn wide primary sticky-action" data-view="result">計算可達範圍 ${icon('arrow')}</button></div><div class="joint-guide"><div class="panel pad"><h3>圖形與求解範圍</h3><div class="toggle" style="margin-top:15px"><button data-route="straight" class="${s.route==='straight'?'active':''}">直下示意</button><button data-route="offset" class="${s.route==='offset'?'active':''}">偏移示意</button></div><p class="help">示意圖不是幾何輸入。真正參與求解的是上面逐一指定的軸向與限制。</p><div class="rule"></div><div class="info-block warn"><strong>多彎頭：這版只解「走向已固定」的高度。</strong><br>若轉這個接頭會帶動整串下游改變方向，請使用「限定朝向」。連續模式只適用朝向不影響後段幾何的接點。</div><p class="help" style="margin-top:13px">不包含任意 3D 逆運動學、管件碰撞、水平對位、施工時的旋轉空間或實際組裝順序。所有相位設定都需對應同一固定走向。</p></div><div class="panel pad" style="margin-top:18px"><h3>導程換算小工具</h3><p class="help">只做單位換算，不辨識 NPT、BSPT 或管徑。</p><div class="formgrid" style="margin-top:12px"><div class="field"><label for="tpi">每英吋牙數 TPI</label><input id="tpi" type="number" inputmode="decimal" min="1" value="14"></div><div class="field"><label for="starts">螺紋線數</label><input id="starts" type="number" inputmode="numeric" min="1" value="1"></div></div><div class="formula" id="tpi-out">導程 = 25.4 ÷ 14 × 1\n= 1.814286 mm／圈</div><p class="help">換算結果不會自動套用到任何接頭。</p></div></div></div>`;
+}
+function valuesForManual(){return s.joints.map(j=>{try{const d=E.domain(j);if(d.values){if(!d.values.length)return NaN;return d.values.reduce((a,n)=>Math.abs(n-(Number.isFinite(j.manual)?j.manual:(j.min+j.max)/2))<Math.abs(a-(Number.isFinite(j.manual)?j.manual:(j.min+j.max)/2))?n:a);}return E.clamp(Number.isFinite(j.manual)?j.manual:(j.min+j.max)/2,j.min,j.max);}catch(e){return NaN;}});}
+function diagram(D,turns=null,isManual=false){
+ if(!Number.isFinite(D))return `<div class="empty-state"><p class="muted">請先修正輸入資料，才能繪製高度示意。</p></div>`;
+ const W=480,H=350,top=48,target=s.target,rangeVals=computed?.intervals?.flat()||[D],mx=Math.max(s.reference,D,target,...rangeVals)*1.08;
+ const scale=236/mx,y=v=>top+v*scale,hy=y(D),ty=y(target),ry=y(s.reference);
+ let path=s.route==='offset'?`M116 ${top} L116 100 Q116 112 128 112 L217 112 Q229 112 229 100 L229 78 Q229 68 239 68 L270 68 Q280 68 280 78 L280 ${Math.max(126,hy-32)}`:`M156 ${top} L237 ${top} Q252 ${top} 252 ${top+15} L252 ${hy-32}`;
+ const hx=s.route==='offset'?280:252;
+ let pts=s.route==='offset'?[[116,94],[184,112],[229,83],[280,Math.max(142,hy-44)]]:[[252,95],[252,hy-46]];
+ let joints='';for(let i=0;i<Math.min(s.joints.length,4);i++){const [x0,y0]=pts[i]||[hx,130+i*25];const label=turns?`${i+1} · ${fmtTurn(turns[i])}`:`${i+1}`;joints+=`<g><rect x="${x0-12}" y="${y0-10}" width="24" height="20" rx="3" fill="#e3e9e1" stroke="#597066" stroke-width="2"/><path d="M${x0-10} ${y0-5}h20 M${x0-10} ${y0+5}h20" stroke="#8b9e90"/><rect x="${x0+(i===2?-85:20)}" y="${y0-12}" width="${turns?65:25}" height="23" rx="6" fill="#e7f2ec"/><text x="${x0+(i===2?-52:turns?52:32)}" y="${y0+4}" font-size="11" font-weight="650" fill="#176c59" text-anchor="middle">${esc(label)}</text></g>`;}
+ const actualLabel=Math.abs(hy-ty)<25?hy-35:hy-8;
+ return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="從固定基準向下量到灑水頭指定基準。預測 ${esc(unitDim(D))}，目標 ${esc(unitDim(target))}。"><defs><pattern id="grid-${isManual?'m':'r'}" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".7" fill="#dce6dc"/></pattern></defs><rect width="480" height="350" fill="url(#grid-${isManual?'m':'r'})"/><path d="M30 ${top}H445" stroke="#bbc9bd" stroke-width="1.2"/><text x="34" y="${top-12}" font-size="12" fill="#697973">固定量測基準 · D = 0</text><path d="M61 ${top}V${ty} M55 ${top}h12 M55 ${ty}h12" stroke="#b25443" stroke-width="1.3"/><text transform="translate(45 ${(top+ty)/2}) rotate(-90)" text-anchor="middle" font-size="13" fill="#a14737">目標 ${esc(unitDim(target))}</text><path d="M87 ${ry}H440" stroke="#abb9ad" stroke-dasharray="3 5"/><path d="M87 ${ty}H440" stroke="#b25443" stroke-width="1.6" stroke-dasharray="6 5"/><rect x="344" y="${ty+6}" width="87" height="22" rx="5" fill="#fff0eb"/><text x="388" y="${ty+21}" font-size="11" text-anchor="middle" fill="#a14737">目標對位面</text><path d="${path}" fill="none" stroke="#4a6459" stroke-width="17" stroke-linejoin="round" stroke-linecap="round"/><path d="${path}" fill="none" stroke="#92a699" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>${joints}<g transform="translate(${hx},${hy})"><rect x="-14" y="-32" width="28" height="23" rx="4" fill="#c6d1c5" stroke="#486657" stroke-width="1.5"/><path d="M-13-25h26M-13-18h26" stroke="#758e7e"/><path d="M-8-9v6M8-9v6M-17 0h34" stroke="#173934" stroke-width="3" stroke-linecap="round"/><circle cy="0" r="4" fill="#176c59"/></g><path d="M${hx+21} ${hy} H323 L341 ${actualLabel}" fill="none" stroke="#176c59" stroke-width="1.3"/><text x="343" y="${actualLabel-5}" font-size="13" font-weight="650" fill="#176c59">${esc(dim(D))} ${U()}</text><text x="240" y="333" text-anchor="middle" font-size="11" fill="#819184">${s.joints.length>4?'圖中僅示意前 4 個接點；全部接點均參與計算':'構件非實測比例；綠點代表你指定的對位基準'}</text></svg>`;
+}
+function rangeChart(intervals){
+ if(!intervals||!intervals.length)return '';
+ const lo=Math.min(intervals[0][0],s.target-s.tolerance),hi=Math.max(intervals[intervals.length-1][1],s.target+s.tolerance),pad=Math.max((hi-lo)*.13,.3),mn=lo-pad,mx=hi+pad,px=v=>22+(v-mn)/(mx-mn)*386;
+ const segs=intervals.map(([a,b])=>Math.abs(b-a)<1e-6?`<path d="M${px(a)} 28v22" stroke="#27745a" stroke-width="3.2"/>`:`<rect x="${px(a)}" y="32" width="${Math.max(1,px(b)-px(a))}" height="14" rx="3" fill="#57977a"/>`).join('');
+ return `<svg class="range-svg" viewBox="0 0 430 83" role="img" aria-label="綠色為可達高度區間，紅色為目標與允許誤差；中間空白不可達。"><path d="M22 39H408" stroke="#e0e8df" stroke-width="6" stroke-linecap="round"/><rect x="${px(s.target-s.tolerance)}" y="20" width="${Math.max(2,px(s.target+s.tolerance)-px(s.target-s.tolerance))}" height="38" fill="#bd624222"/>${segs}<path d="M${px(s.target)} 13v46" stroke="#b25443" stroke-width="1.8"/><path d="m${px(s.target)-4} 12 4 5 4-5" fill="#b25443"/><text x="22" y="75" font-size="11" fill="#697973">${dim(lo)} ${U()}</text><text x="408" y="75" text-anchor="end" font-size="11" fill="#697973">${dim(hi)} ${U()}</text></svg>`;
+}
+function tableOfTurns(c){return `<table class="data-table"><thead><tr><th style="width:42%">接點 / 允許範圍</th><th class="right" style="width:31%">裝配座標</th><th class="right" style="width:27%">高度變化</th></tr></thead><tbody>${s.joints.map((j,i)=>{const n=c.turns[i],change=E.contribution(j,n),percentage=j.max>j.min?100*(n-j.min)/(j.max-j.min):50;return `<tr><td><strong>${i+1}. ${esc(j.name)}</strong><small>${nf(j.min)}～${nf(j.max)} 圈 · ${modeText(j.mode)}</small></td><td class="right"><span class="turnnum num">${fmtTurn(n)}</span><small>圈 · 自訂零位起算</small><div class="margin-track"><i style="left:${E.clamp(percentage,0,100)}%"></i></div></td><td class="right num">${sgn(val(change))} ${U()}<small>${change>1e-7?'向下增加':change< -1e-7?'向上縮短':'高度不變'}</small></td></tr>`;}).join('')}</tbody></table>`;}
+function formulaText(c){
+ const q=E.dir(s.length.axis),L=c?.L??s.length.trial;
+ let t=`D = D₀ + q × (L − L₀) − Σ[cᵢ × pᵢ × (nᵢ − n₀ᵢ)]\n\n全部以 mm 計：\nD₀ = ${nf(s.reference,5)}\n管長投影 = ${q} × (${nf(L,5)} − ${nf(s.length.original,5)}) = ${sgn(q*(L-s.length.original))}`;
+ if(c?.turns){s.joints.forEach((j,i)=>{t+=`\n接點 ${i+1}：−(${E.dir(j.axis)}) × ${nf(j.pitch,6)} × (${fmtTurn(c.turns[i])} − ${fmtTurn(j.ref)}) = ${sgn(E.contribution(j,c.turns[i]))}`;});t+=`\n\nD = ${nf(c.D,6)} mm\n目標 = ${nf(s.target,6)} mm\n差值 = ${sgn(c.D-s.target)} mm`;}
+ return t;
+}
+function renderResult(preserveEditor=false){
+ const el=$('#view-result');
+ const wasLengthOpen=!!el.querySelector('#length-settings')?.open;
+ const heading=`<div class="sectionhead"><div><h2>${s.strategy==='uncertain'?'穩定達標分析':'對位結果'}</h2><p>${s.strategy==='uncertain'?'不選一組幸運的圈數，而是檢查整個允許範圍。':'先檢查有沒有解，再決定是否需要換管長。'}</p></div><button class="btn" data-view="goal">修改尺寸</button></div>`;
+ if(currentError){el.innerHTML=heading+`<div class="panel empty-state"><h3>${currentError.kind==='complexity'?'運算量超過此版上限，尚未完成判斷':'資料需要修正'}</h3><div class="error-list">${esc(currentError.message)}</div><p class="help">目前沒有輸出圈數或施工建議，這不等於數學上無解。</p><div class="solve-actions"><button class="btn primary" data-view="goal">修改尺寸</button><button class="btn" data-view="joints">修改接頭</button></div></div>${renderLength()}`;if(wasLengthOpen&&el.querySelector('#length-settings'))el.querySelector('#length-settings').open=true;return;}
+ const r=computed;
+ if(r.kind==='domain-empty'){el.innerHTML=heading+`<div class="panel empty-state"><h3>方向／固定值與允許範圍不相容</h3><p>${r.empty.map(i=>`${i+1}. ${esc(s.joints[i].name)}`).join('<br>')}</p><p class="help">這些接點沒有同時符合所有限制的圈數。只改管長也無法解決，請先核對相位、固定值或允許範圍。</p><button class="btn primary" style="margin-top:20px" data-view="joints">檢查接頭限制</button></div>`;return;}
+ const c=r.candidate||r.closest||null,D=c?.D??(r.min+r.max)/2;
+ let main='';
+ if(r.kind==='feasible'){
+  main=`<div class="result-state">${icon('check')} ${s.isExample?'示例有解':'目標在幾何上可達'}</div><div class="result-big num">${dim(c.D)}<span class="unit">${U()}</span></div><p class="result-desc">${Math.abs(c.error)<1e-5?'到達目標中心。':`相對目標${c.error>0?'偏低':'偏高'} ${unitDim(Math.abs(c.error))}，在允許誤差內。`}${s.strategy==='adjustable'?'以下是裝配座標，不是從現況開始退牙的操作指令。':''}</p><div class="readout-row"><div><div class="label">對位允許誤差</div><strong class="num">± ${unitDim(s.tolerance)}</strong></div><div><div class="label">最窄接頭的餘量比例</div><strong class="num">${c.margin===null?'全部固定':nf(c.margin*100,1)+'%'}</strong></div></div>`;
+ }else if(r.kind==='infeasible'){
+  main=`<div class="result-state fail">${icon('warn')} 現有管長，沒有允許範圍內的解</div><div class="result-big" style="font-size:30px">${r.reason==='gap'?'落在方向限制的空隙':'目標超出可達高度'}</div><p class="result-desc">${r.reason==='gap'?'目標雖然在最短／最長之間，但中間有不可達的空白；不能只看上下界。':`最接近的幾何位置仍${D>s.target?'偏低':'偏高'} ${unitDim(Math.abs(D-s.target))}。`}請保留接頭限制，改管長或重新核對設計。</p><div class="readout-row"><div><div class="label">最近可達距離（非達標解）</div><strong class="num">${unitDim(D)}</strong></div><div><div class="label">超出允許誤差</div><strong class="num">${unitDim(Math.max(0,Math.abs(D-s.target)-s.tolerance))}</strong></div></div>`;
+ }else{
+  main=`<div class="result-state ${r.guarantee?'':'warn'}">${icon(r.guarantee?'check':'warn')} ${r.guarantee?'輸入的不確定範圍皆在目標內':'目前無法保證所有狀態都達標'}</div><div class="result-big num" style="font-size:31px">${dim(r.range[0])}～${dim(r.range[1])}<span class="unit">${U()}</span></div><p class="result-desc">這是所有允許圈數加上 ± ${unitDim(s.uncertainty)} 的最壞上下界，不是可指定的鎖緊位置。</p><div class="readout-row"><div><div class="label">目標允許範圍</div><strong class="num" style="font-size:15px">${dim(s.target-s.tolerance)}～${dim(s.target+s.tolerance)} ${U()}</strong></div><div><div class="label">理想置中仍需容差至少</div><strong class="num">± ${unitDim(r.requiredTolerance)}</strong></div></div>`;
+ }
+ const safety=r.kind==='feasible'?`<div class="callout ${s.uncertainty>0&&c.guaranteed?'good':''}">${s.uncertainty===0?'尚未計入量測／加工誤差；可在「尺寸」頁補上不確定量。':c.guaranteed?`此方案加上 ± ${unitDim(s.uncertainty)}，仍在目標容差內。`:`理論尺寸有解，但加上 ± ${unitDim(s.uncertainty)} 的誤差後，仍不能保證達標。`}</div>`:'';
+ const nominal=`${r.kind==='feasible'?`<div class="panel pad"><div class="between result-list-head"><h3>一組符合限制的裝配座標</h3><button class="textbtn" data-action="use-solution">帶入試轉</button></div>${tableOfTurns(c)}<p class="note-mini">圈數顯示到小數 5 位只為數值檢查，不代表現場有此操作精度。餘量比例是離上下限的距離比例，不是密封安全係數。</p></div>`:''}`;
+ const resultHTML=heading+`<div class="layout-result"><div class="panel drawing-panel"><div class="drawing-head"><h3>高度與管路示意</h3><span class="drawing-label">${r.kind==='infeasible'?'顯示最近位置':s.strategy==='uncertain'?'圖示為範圍中點':'顯示此方案'}</span></div><div class="preview-fields"><div class="item"><small>目標距離</small><strong class="num">${unitDim(s.target)}</strong></div><div class="item"><small>試算管長</small><strong class="num">${unitDim(s.length.trial)}</strong></div><button class="textbtn" data-action="length-focus">改管長</button></div><div class="diagram">${diagram(D,c?.turns)}</div><div class="legend"><span><i class="key target"></i>目標</span><span><i class="key"></i>計算位置</span><span><i class="key baseline"></i>D₀</span></div><div class="rangebox"><div class="between"><strong>模型可達區間</strong><span>紅線為目標</span></div>${rangeChart(r.intervals)}<p class="note-mini">${r.intervals.length>1?`${r.intervals.length} 段可達區間；綠色之間的空白不可達。`:'綠色範圍內可連續到達；若縮成短線，則只有單一高度。'} 此帶不含額外量測誤差。</p></div><div class="range-summary">完整範圍：${r.intervals.slice(0,8).map(v=>Math.abs(v[1]-v[0])<1e-7?unitDim(v[0]):`${dim(v[0])}～${dim(v[1])} ${U()}`).join('；')}${r.intervals.length>8?'；其餘見結果文字檔':''}</div></div><div class="result-stack"><div class="panel result-main">${main}</div>${safety}${nominal}${renderLength()}<div class="panel pad"><details class="disclosure"><summary>計算公式與逐項驗算</summary><pre class="formula">${esc(formulaText(c))}</pre><p class="help">c：向下 +1、向上 −1、水平 0。q 是更換管段的相同軸向係數。所有軸向均假設在裝配後固定。</p></details><details class="disclosure"><summary>選解優先順序</summary><div class="formgrid" style="margin-top:12px">${selectField('僅影響名義解，不改合格條件','objective',s.objective,[['margin','先在容差內增加接頭餘量'],['center','先靠近目標中心，再增加餘量']],'以精確可達區間判定，不用粗取樣猜測。',true)}</div></details><div class="between wrap" style="margin-top:13px"><button class="btn tiny" data-action="report">${icon('copy')} 結果文字</button><button class="btn tiny" data-action="print">列印</button><button class="btn tiny" data-action="save-html">${icon('save')} 保存 HTML</button></div></div></div></div>`;
+ if(preserveEditor && el.querySelector('#length-settings') && el.querySelector('.layout-result')){
+  const temp=document.createElement('section');temp.innerHTML=resultHTML;
+  patchPreserving(el,temp,'length-settings');
+ }else el.innerHTML=resultHTML;
+ if(preserveEditor&&wasLengthOpen&&el.querySelector('#length-settings'))el.querySelector('#length-settings').open=true;
+}
+function patchPreserving(oldRoot,newRoot,id){
+ const children=[...newRoot.children],oldKeep=[...oldRoot.children].find(n=>n.id===id||n.querySelector('#'+id)),newKeep=children.find(n=>n.id===id||n.querySelector('#'+id));
+ if(!oldKeep||!newKeep){oldRoot.innerHTML=newRoot.innerHTML;return;}
+ const oldAt=oldKeep.id===id,newAt=newKeep.id===id;
+ if(oldAt!==newAt){oldRoot.innerHTML=newRoot.innerHTML;return;}
+ for(const n of [...oldRoot.childNodes])if(n!==oldKeep)n.remove();
+ let after=false;
+ for(const n of children){if(n===newKeep){after=true;continue;}if(after)oldRoot.append(n);else oldRoot.insertBefore(n,oldKeep);}
+ if(!oldAt){oldKeep.className=newKeep.className;patchPreserving(oldKeep,newKeep,id);}
+}
+function renderLength(){
+ let message='',rows='';const a=advice;
+ if(!a)message='請先修正輸入。';
+ else if(a.kind==='horizontal')message='選擇的是水平管段。保持走向固定時，改這一段的長度不會改變高度；請選實際可更換的向上／向下管段。';
+ else if(a.kind==='width')message=`不確定範圍太寬。單純改長度只會平移，不能縮窄它；即使理想置中，也需要至少 ± ${unitDim(a.requiredTolerance)} 的容差。這不是建議放寬消防要求。`;
+ else if(a.kind==='out-of-bounds')message='你設定的可用管長上下限內，沒有適合的長度。';
+ else if(a.kind==='grid')message='存在連續長度解，但指定的製作／選料步距沒有命中。下方列出的是未取步距前的範圍。';
+ else if(a.kind==='domain-empty')message='接頭的方向與允許圈數先發生矛盾；改管長無法修復這項限制。';
+ else if(a.kind==='ok'){
+  rows=a.suggestions.map((x,i)=>`<div class="suggestion"><div class="content"><div class="length num">${dim(x.L)} <span>${U()}</span>${i===0?'<span class="tag">代表方案</span>':''}</div><div class="detail">相對原短管 ${Math.abs(x.delta)<1e-6?'不變':`${x.delta>0?'增加':'減少'} ${unitDim(Math.abs(x.delta))}`}<br>${x.turns?`名義距離 ${unitDim(x.D)} · 餘量 ${x.margin===null?'固定':nf(x.margin*100,1)+'%'}`:`最壞範圍 ${dim(x.range[0])}～${dim(x.range[1])} ${U()}`}</div></div><button class="btn tiny ${Math.abs(x.L-s.length.trial)<1e-7?'soft':''}" data-apply-length="${x.L}">${Math.abs(x.L-s.length.trial)<1e-7?'目前試算':'試算此長度'}</button></div>`).join('');
+  message='維持原本接頭限制，以下只改指定那一段管長。列出代表方案，不是全部解。';
+ }
+ return `<div class="panel pad" id="length-section"><div class="between"><h3>反推需要哪一支管長</h3><span class="chip">同一管段</span></div><p class="help">${esc(message)}</p>${rows}${a?.ranges?.length?`<p class="length-range" style="margin-top:12px">步距前的可用範圍：${a.ranges.slice(0,8).map(v=>`${dim(v[0])}～${dim(v[1])} ${U()}`).join('；')}${a.ranges.length>8?' …':''}</p>`:''}<details class="disclosure" id="length-settings" style="margin-top:14px"><summary>管段原長、試算長度與選料步距</summary><div class="formgrid" style="margin-top:12px">${field('原短管長 L₀','length.original',val(s.length.original),{unit:U(),help:'D₀ 所對應的原管長。'})}${field('目前試算新長 L','length.trial',val(s.length.trial),{unit:U(),help:'更改這裡不會覆寫 D₀。'})}${field('可用最短管長','length.min',val(s.length.min),{unit:U()})}${field('可用最長管長','length.max',val(s.length.max),{unit:U()})}${field('製作／選料步距','length.step',val(s.length.step),{unit:U(),help:'候選長度為步距的整數倍。'})}${selectField('欲更換管段的走向','length.axis',s.length.axis,axisOptions)}</div><button class="btn wide" data-action="reset-length" style="margin-top:14px">回到原短管長</button></details><p class="note-mini">此處不是新管的下料保證。假設換管後導程、零位與接合幾何保持相同；重新車牙、不同接頭或更換型號後，需重新量測基準與相位。</p></div>`;
+}
+function renderManual(){
+ const ns=valuesForManual();
+ $('#view-manual').innerHTML=`<div class="sectionhead"><div><h2>轉動與高度，一起看</h2><p>範圍內試算裝配座標，不是現場鬆緊操作指示。</p></div><button class="btn" data-action="use-solution">帶入求解</button></div><div class="layout-result"><div class="panel drawing-panel"><div class="manual-hero" id="manual-stats"></div><div class="diagram" id="manual-drawing"></div><div class="legend"><span><i class="key target"></i>目標</span><span><i class="key"></i>目前模擬</span></div><div class="rangebox"><h3 style="font-size:14px">對位差放大尺</h3><div id="manual-zoom"></div><p class="note-mini">這裡放大的是高度差，不是放大螺紋可用範圍。</p></div></div><div class="panel pad"><div class="between" style="margin-bottom:15px"><h3>各接點試轉</h3><select class="inline-select" data-field="manualStep" aria-label="每次試轉步距">${[[.125,'每次 1/8 圈'],[.25,'每次 1/4 圈'],[.5,'每次 1/2 圈'],[1,'每次 1 圈']].map(([v,t])=>`<option value="${v}" ${Math.abs(v-s.manualStep)<1e-8?'selected':''}>${t}</option>`).join('')}</select></div>${s.joints.map((j,i)=>{let d;try{d=E.domain(j);}catch(e){d=null;}return `<div class="manual-row"><div class="between"><strong>${i+1}. ${esc(j.name)}</strong><span class="chip">${axisText(j.axis)}</span></div><div class="manual-info">${modeText(j.mode)} · ${nf(j.pitch)} mm／圈 · 允許 ${nf(j.min)}～${nf(j.max)} 圈</div>${d?.values?`<select data-manual="${i}" style="margin-top:13px" aria-label="${esc(j.name)}的允許圈數" ${j.mode==='fixed'||!d.values.length?'disabled':''}>${d.values.length?d.values.map(n=>`<option value="${n}" ${Math.abs(n-ns[i])<1e-7?'selected':''}>${fmtTurn(n)} 圈${j.mode==='phase'?' · 方向正確':''}</option>`).join(''):'<option>沒有允許的圈數</option>'}</select>`:`<input type="range" data-slider="${i}" aria-label="${esc(j.name)}試轉" min="${j.min}" max="${j.max}" step="0.001" value="${ns[i]}"><div class="manual-controls"><button class="btn" data-nudge="${i}" data-sign="-1" aria-label="減少${esc(j.name)}模擬圈數">−</button><input type="number" step="any" inputmode="decimal" data-manual="${i}" value="${fmtTurn(ns[i])}" aria-label="${esc(j.name)}模擬圈數"><span class="small muted">圈</span><button class="btn" data-nudge="${i}" data-sign="1" aria-label="增加${esc(j.name)}模擬圈數">+</button></div>`}<div class="manual-info" id="manual-info-${i}"></div></div>`;}).join('')}<div class="callout" style="margin-top:17px">不能把任意圈數當成合格鎖法，也不要以退牙遷就高度。此處只模擬你已提供的允許範圍。</div></div></div>`;
+ updateManual();
+}
+function updateManual(){
+ const ns=valuesForManual(),ok=!currentError&&ns.every(Number.isFinite),D=ok?E.position(s,ns):NaN,diff=D-s.target,inside=ok&&Math.abs(diff)<=s.tolerance+1e-7;
+ if(!$('#manual-stats'))return;
+ $('#manual-stats').innerHTML=`<div class="result-state ${inside?'':'warn'}">${icon(inside?'check':'info')} ${!ok?'請先修正接頭／尺寸限制':inside?'此模擬在目標誤差內':`目前${diff>0?'偏低':'偏高'} ${unitDim(Math.abs(diff))}`}</div><div class="result-big num">${dim(D)}<span class="unit">${U()}</span></div><p class="help">目標 ${unitDim(s.target)} ± ${unitDim(s.tolerance)}${s.strategy==='uncertain'?'；單一模擬命中，不等於所有狀態都能達標。':''}</p>`;
+ $('#manual-drawing').innerHTML=diagram(D,ns,true);
+ if(ok){const span=Math.max(Math.abs(diff)*1.3,s.tolerance*2,1),px=v=>215+v/span*166;$('#manual-zoom').innerHTML=`<svg viewBox="0 0 430 105" class="range-svg" role="img" aria-label="對位差 ${esc(unitDim(diff))}"><path d="M40 58H390" stroke="#dce4df" stroke-width="7" stroke-linecap="round"/><rect x="${px(-s.tolerance)}" y="45" width="${Math.max(1,px(s.tolerance)-px(-s.tolerance))}" height="26" rx="4" fill="#b2544322"/><path d="M215 33v48" stroke="#b25443" stroke-width="1.7"/><circle cx="${px(diff)}" cy="58" r="7" fill="#176c59"/><text x="${E.clamp(px(diff),78,352)}" y="23" text-anchor="middle" font-size="14" font-weight="650" fill="#176c59">${sgn(val(diff))} ${U()}</text><text x="40" y="99" font-size="11" fill="#697973">偏高（−）</text><text x="215" y="99" text-anchor="middle" font-size="11" fill="#a14737">目標 0</text><text x="390" y="99" text-anchor="end" font-size="11" fill="#697973">偏低（＋）</text></svg>`;}else $('#manual-zoom').textContent='資料不完整，暫不顯示。';
+ s.joints.forEach((j,i)=>{const o=$('#manual-info-'+i);if(o)o.textContent=Number.isFinite(ns[i])?`相對基準圈數 ${nf(j.ref)}：軸向多吃入 ${nf(j.pitch*(ns[i]-j.ref),5)} mm；下垂距離變化 ${sgn(val(E.contribution(j,ns[i])))} ${U()}`:'沒有允許的模擬值';});
+}
+function renderAll(){
+ const oldDetails=$$('details[open]').map(e=>e.id).filter(Boolean);$$('[data-joint-detail][open]').forEach(x=>openJointIds.add(x.dataset.jointDetail));
+ calculate();header();renderGoal();renderJoints();renderResult();renderManual();
+ for(const id of oldDetails){const el=document.getElementById(id);if(el)el.open=true;}
+ setView(s.view,false);persist();
+}
+function updateField(key,value){
+ const textFields=['name','evidence','referenceLabel','zeroLabel'],dimFields=['reference','target','tolerance','uncertainty'];
+ if(key.startsWith('j.')){const [,i,k]=key.split('.');const j=s.joints[Number(i)];if(!j)return;j[k]=['name','axis','mode'].includes(k)?value:(value===''?NaN:Number(value));}
+ else if(key.startsWith('length.')){const k=key.split('.')[1];s.length[k]=k==='axis'?value:(value===''?NaN:Number(value)*F());}
+ else if(dimFields.includes(key))s[key]=value===''?NaN:Number(value)*F();
+ else if(key==='checked')s.checked=!!value;
+ else if(key==='manualStep')s[key]=Number(value);
+ else if(textFields.includes(key))s[key]=String(value).slice(0,2000);
+ else s[key]=value;
+ if(key==='name'&&s.name&&!s.name.includes('教學案例'))s.isExample=false;
+ if(key==='unit'||key.endsWith('.mode')||key==='manualStep'||key==='objective'){renderAll();return;}
+ calculate();header();
+ if(s.view!=='goal')renderGoal();
+ if(s.view!=='joints')renderJoints();
+ else {
+  s.joints.forEach((j,i)=>{const root=document.querySelector('[data-joint-detail="'+j.id+'"]');if(!root)return;root.querySelector('.joint-title strong').textContent=j.name;root.querySelector('.joint-title small').textContent=axisText(j.axis)+' · '+nf(j.pitch)+' mm／圈 · '+nf(j.min)+'～'+nf(j.max)+' 圈 · '+modeText(j.mode);try{const d=E.domain(j);root.querySelector('.meta').textContent=d.values?(d.values.length?d.values.map(fmtTurn).join('、')+' 圈':'此範圍沒有允許圈數'):'鎖入可以在範圍內連續選擇';}catch(e){root.querySelector('.meta').textContent='請修正數值。';}});
+ }
+ renderResult(s.view==='result'&&key.startsWith('length.'));renderManual();setView(s.view,false);persist();
+}
+function toast(t){$('#toast').textContent=t;$('#toast').classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>$('#toast').classList.remove('show'),3200);}
+function openDialog(title,html){dialogFocus=document.activeElement;$('#dialog-heading').textContent=title;$('#dialog-content').innerHTML=html;$('#dialog').classList.add('open');document.body.style.overflow='hidden';$('#dialog [data-action="close-dialog"]').focus();}
+function closeDialog(){$('#dialog').classList.remove('open');document.body.style.overflow='';if(dialogFocus?.isConnected)dialogFocus.focus();}
+function help(){openDialog('使用方式與求解界線',`<h3>最短流程</h3><ol><li>在「尺寸」填目標 D*、基準 D₀ 和允許誤差。</li><li>在「接頭」填每圈前進量、基準圈數，以及經確認的允許上下限。</li><li>有方向要求時選「限定朝向」，填某次方向正確的圈數。</li><li>看「結果」；無解時看反推管長。「試轉」可比較圈數與高度的關係。</li></ol><h3>本版確實求解的範圍</h3><p>1～12 個接點、向下／向上／水平的固定軸向、連續圈數、整圈同相位或固定圈數。採區間加總保留離散空隙，並透過單調搜尋最大化各可調接點離上下限的最小比例。不是只把最短和最長連成一整條。</p><p>「範圍內可選」求一組解；「最終圈數不確定」驗證全部允許狀態的最壞上下界。量測／加工不確定量是額外的對稱上界，與圈數範圍分開計入。</p><h3>此版沒有求解的部分</h3><p>任意角度 3D 逆運動學、彎頭實體尺寸與碰撞、水平目標、相互耦合的可旋轉接頭、管件可否按順序裝入、扭矩與密封、灑水分布及消防驗收。多彎頭只適用於走向已知且固定的情況，不能把本版當成完整 3D 配管設計。</p><h3>關於圈數與基準</h3><p>所有圈數是相對清楚記錄的零位；不等於露出牙數或總吃牙數。D₀ 必須與各接頭的 n₀ 同時對應。允許範圍是外部輸入，不由導程自動推斷。導程為每圈前進距離，只有單線螺紋才等於牙距。</p><div class="formula">D = D₀ + q(L − L₀) − Σ cᵢpᵢ(nᵢ − n₀ᵢ)\n\nc：向下 +1 / 向上 −1 / 水平 0\n相位限制：n = 已知同向圈數 + 整數</div><h3>不要把計算解誤當施工指示</h3><p>不得用此工具決定消防設備是否能鬆牙、過度鎖緊或帶壓調整。實際規格、施工與驗收應由負責消防設備的人員按適用文件確認。更換管段／車牙後，零位、允許深度和相位不一定不變，需重新量測。</p><h3>參考來源（需連網才可開啟）</h3><p><a href="https://www.mathworks.com/help/sm/ref/leadscrewjoint.html" target="_blank" rel="noopener">MathWorks：Lead Screw Joint</a> — 螺旋運動的旋轉與軸向位移耦合。</p><p><a href="https://safst.swagelok.com/en/resources/weekly-column/threaded-fitting-assembly" target="_blank" rel="noopener">Swagelok：Threaded Fitting Assembly</a> — 密封受螺紋、材料與安裝等多項因素影響，不存在由本工具推得的通用圈數標準。</p><p><a href="https://ipexna.com/wp-content/uploads/2025/07/flyer-ipex-caen-blazemaster-rapid-seal-adapter.pdf" target="_blank" rel="noopener">IPEX：Rapid Seal Adapter 安裝文件</a> — 該特定產品明示不要靠過鬆或過緊補償深度。其具體施工圈數不能套用到照片中的未知型號。</p><p class="help">資料核對：2026-10-05。核心計算完全離線，無任何網路請求或第三方程式依賴。</p><h3>手機與資料保存</h3><p>手機採底部分頁、大觸控按鈕與單欄顯示。瀏覽器允許時自動暫存；隱私模式或檔案環境可能不允許。重要設定請使用「保存此份 HTML」或 JSON 匯出。iPhone「檔案」中的預覽不一定執行 JavaScript；可改用可執行 HTML 的瀏覽器或靜態網頁部署。</p><button class="btn wide" data-action="self-tests">執行內建計算核心驗算</button>`);}
+function report(){
+ let out=`灑水頭高度對位 — 幾何試算報告\n${s.name}\n${new Date().toLocaleString('zh-TW')}\n資料：${s.isExample?'教學示例（非現場規格）':s.checked&&s.evidence.trim()?'使用者自行核對':'現場輸入，未核對'}\n來源：${s.evidence||'未提供'}\n對位基準：${s.referenceLabel}\n零位紀錄：${s.zeroLabel}\n\n目標：${unitDim(s.target)} ± ${unitDim(s.tolerance)}\nD₀：${unitDim(s.reference)}\n額外不確定量：± ${unitDim(s.uncertainty)}\n原短管長：${unitDim(s.length.original)}\n試算新長：${unitDim(s.length.trial)}\n更換管段軸向：${axisText(s.length.axis)}\n方式：${s.strategy==='uncertain'?'全部狀態不確定分析':'圈數可選的約束求解'}\n`;
+ for(const [i,j] of s.joints.entries())out+=`\n接點 ${i+1} ${j.name}：${j.pitch} mm/圈；n₀=${j.ref}；${j.min}～${j.max} 圈；${axisText(j.axis)}；${modeText(j.mode)}${j.mode==='phase'?`；同向圈數 ${j.phase}`:j.mode==='fixed'?`；固定 ${j.fixed}`:''}`;
+ if(currentError)out+=`\n\n未完成判斷：${currentError.message}`;
+ else {out+=`\n\n狀態：${({feasible:'幾何上有解',infeasible:'現管長無解',robust:'所有輸入狀態都在目標範圍','not-robust':'不能保證全部狀態達標','domain-empty':'方向／固定值與圈數範圍不相容'})[computed.kind]}`;
+ if(computed.intervals.length)out+='\n可達區間：\n'+computed.intervals.map(([a,b])=>`${dim(a)}～${dim(b)} ${U()}`).join('\n');
+ if(computed.candidate){out+='\n\n一組裝配座標（不是退牙指令）：\n'+computed.candidate.turns.map((n,i)=>`${i+1}. ${s.joints[i].name}：${fmtTurn(n)} 圈`).join('\n');out+='\n\n'+formulaText(computed.candidate);out+=`\n含額外不確定量後仍在目標範圍：${computed.candidate.guaranteed?'是':'否'}`;}
+ if(computed.range)out+=`\n所有狀態含額外不確定量的最壞上下界：${dim(computed.range[0])}～${dim(computed.range[1])} ${U()}`;
+ if(advice?.ranges?.length)out+='\n\n未取步距前的可用管長：\n'+advice.ranges.map(([a,b])=>`${dim(a)}～${dim(b)} ${U()}`).join('\n');}
+ return out+'\n\n模型界線：固定世界軸向的高度投影；假設更換管段後的接合幾何與相位不變。未處理任意 3D 轉向、水平對位、碰撞、裝配順序、密封、扭矩或消防驗收。允許圈數須有外部依據，不能由照片或牙距推斷。\n\n本報告不是施工或安全核可。';
+}
+function download(name,contents,mime){const blob=new Blob([contents],{type:mime}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}
+function fileName(ext){return '高度對位_'+s.name.replace(/[\\/:*?"<>|]/g,'_').slice(0,50)+'.'+ext;}
+function saveHTML(){
+ try{E.validate(s);}catch(e){toast('請先修正未完成或無效的欄位，再保存 HTML');return;}
+ const clone=document.documentElement.cloneNode(true),data=JSON.parse(JSON.stringify(s));data.storageKey='thread-snapshot-'+Date.now();
+ clone.classList.remove('ready');clone.querySelector('body').style.overflow='';clone.querySelector('#app').style.display='none';clone.querySelector('#dialog').classList.remove('open');clone.querySelector('#toast').classList.remove('show');clone.querySelector('#seed-data').textContent=JSON.stringify(data).replace(/</g,'\\u003c').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029');
+ download(fileName('html'),'<!DOCTYPE html>\n'+clone.outerHTML,'text/html;charset=utf-8');toast('已建立含目前設定的獨立 HTML');
+}
+function saveMenu(){openDialog('保存與交接',`<p>把目前尺寸、接頭限制與試算管長一起帶走。</p><button class="btn wide primary" data-action="save-html" style="margin-top:18px">${icon('save')} 保存此份 HTML（含目前設定）</button><div class="grid2" style="margin-top:12px"><button class="btn" data-action="export-json">匯出專案 JSON</button><button class="btn" data-action="import-json">匯入專案 JSON</button></div><button class="btn wide" data-action="report" style="margin-top:12px">查看／保存結果文字</button><p class="help" style="margin-top:15px">${storageOK?'本瀏覽器可自動暫存，但不同檔名、瀏覽器或清除資料後不一定沿用。':'此環境不允許本機暫存，請另存 HTML 或 JSON。'} 工具不會上傳任何資料。</p>`);}
+function showReport(){openDialog('結果文字與驗算',`<textarea id="report-text" readonly aria-label="完整試算報告">${esc(report())}</textarea><div class="solve-actions"><button class="btn" data-action="copy-report">複製文字</button><button class="btn primary" data-action="download-report">保存文字檔</button></div>`);}
+function useSolution(){if(!computed?.candidate){toast('目前沒有可帶入的名義解；請先在「尺寸」選可控制圈數的方式。');return;}computed.candidate.turns.forEach((n,i)=>s.joints[i].manual=n);renderManual();setView('manual');toast('已帶入數學方案，只進行模擬');}
+function newProject(){openDialog('建立現場試算',`<p>保留目前欄位作為輸入模板，並標記為「現場輸入・未核對」。請把尺寸、導程和每個允許範圍替換成你的實測或規格資料；程式不會把示例變成實際規格。</p><button class="btn wide primary" data-action="confirm-new" style="margin-top:20px">建立現場試算並填尺寸</button>`);}
+function loadExample(k){openDialog('載入教學案例',`<p>將取代目前畫面資料。尚未保存的設定請先保存；不會變更已另存的 HTML／JSON。</p><button class="btn wide primary" data-load-example="${esc(k)}" style="margin-top:20px">載入此案例</button>`);}
+function setManual(i,n){
+ const j=s.joints[i];if(!Number.isFinite(n))return;
+ const d=E.domain(j);if(d.values){if(!d.values.some(v=>Math.abs(v-n)<1e-6)){toast('此圈數不符合方向或固定限制');return;}}
+ else if(n<j.min-1e-8||n>j.max+1e-8){toast('模擬圈數必須在允許上下限內');return;}
+ j.manual=n;const number=$(`[data-manual="${i}"]`),slider=$(`[data-slider="${i}"]`);if(number&&document.activeElement!==number)number.value=fmtTurn(n);if(slider&&document.activeElement!==slider)slider.value=n;updateManual();persist();
+}
+document.addEventListener('click',async ev=>{
+ const nav=ev.target.closest('[data-view]');if(nav){setView(nav.dataset.view);return;}
+ const route=ev.target.closest('[data-route]');if(route){s.route=route.dataset.route;renderAll();return;}
+ const strategy=ev.target.closest('[data-strategy]');if(strategy){s.strategy=strategy.dataset.strategy;renderAll();return;}
+ const apply=ev.target.closest('[data-apply-length]');if(apply){s.length.trial=Number(apply.dataset.applyLength);renderAll();toast('已用新管長重新求解；原基準未被覆寫');return;}
+ const remove=ev.target.closest('[data-remove]');if(remove){const i=Number(remove.dataset.remove);if(s.joints.length>1){openJointIds.delete(s.joints[i].id);s.joints.splice(i,1);renderAll();}return;}
+ const nudge=ev.target.closest('[data-nudge]');if(nudge){const i=Number(nudge.dataset.nudge),j=s.joints[i],n=valuesForManual()[i]+Number(nudge.dataset.sign)*s.manualStep;setManual(i,E.clamp(n,j.min,j.max));return;}
+ const ex=ev.target.closest('[data-load-example]');if(ex){s=example(ex.dataset.loadExample);openJointIds.clear();closeDialog();renderAll();setView('result');return;}
+ const b=ev.target.closest('[data-action]');if(!b)return;
+ const action=b.dataset.action;
+ if(action==='help')help();else if(action==='close-dialog')closeDialog();else if(action==='save-menu')saveMenu();else if(action==='save-html')saveHTML();else if(action==='report')showReport();else if(action==='download-report')download(fileName('txt'),report(),'text/plain;charset=utf-8');
+ else if(action==='export-json'){try{E.validate(s);download(fileName('json'),JSON.stringify(s,null,2),'application/json;charset=utf-8');}catch(e){toast('請先修正欄位，再匯出專案');}}else if(action==='import-json')$('#import-file').click();
+ else if(action==='copy-report'){const text=report();try{await navigator.clipboard.writeText(text);toast('已複製結果');}catch(e){const a=$('#report-text');a.focus();a.select();try{if(!document.execCommand('copy'))throw new Error();toast('已複製結果');}catch(err){toast('請長按文字選取複製，或保存文字檔');}}}
+ else if(action==='print'){setView('result');window.print();}else if(action==='use-solution')useSolution();else if(action==='new-project')newProject();
+ else if(action==='confirm-new'){s.isExample=false;s.checked=false;s.name='現場高度試算';s.evidence='';closeDialog();renderAll();setView('goal');}
+ else if(action==='add-joint'){if(s.joints.length<12){const j=makeJoint('接點 '+(s.joints.length+1));s.joints.push(j);openJointIds.add(j.id);renderAll();$(`[data-joint-detail="${j.id}"]`).scrollIntoView({block:'center',behavior:'smooth'});}}
+ else if(action==='length-focus'){$('#length-settings').open=true;$('#length-section').scrollIntoView({block:'start',behavior:'smooth'});}
+ else if(action==='reset-length'){s.length.trial=s.length.original;renderAll();toast('已回到原短管長');}
+ else if(action==='self-tests'){const results=window.ThreadTests.run();openDialog('計算核心驗算',`<p>${results.filter(t=>t.pass).length} / ${results.length} 項通過。這是模型的數值測試，不是消防施工認證。</p>${results.map(t=>`<div class="testline ${t.pass?'pass':'fail'}">${t.pass?'✓':'✗'} ${esc(t.name)}${t.error?`：${esc(t.error)}`:''}</div>`).join('')}`);}
+});
+document.addEventListener('change',ev=>{
+ const t=ev.target;
+ if(t.dataset.field){updateField(t.dataset.field,t.type==='checkbox'?t.checked:t.value);return;}
+ if(t.matches('[data-example]')&&t.value){loadExample(t.value);return;}
+ if(t.dataset.manual!==undefined){const i=Number(t.dataset.manual);setManual(i,Number(t.value));t.value=fmtTurn(valuesForManual()[i]);return;}
+ if(t.id==='tpi'||t.id==='starts'){const tpi=Number($('#tpi').value),starts=Number($('#starts').value);$('#tpi-out').textContent=tpi>0&&starts>0&&Number.isInteger(starts)?`導程 = 25.4 ÷ ${tpi} × ${starts}\n= ${nf(25.4/tpi*starts,6)} mm／圈`:'請輸入正數 TPI 與正整數線數。';}
+});
+document.addEventListener('input',ev=>{const t=ev.target;if(t.dataset.slider!==undefined)setManual(Number(t.dataset.slider),Number(t.value));});
+document.addEventListener('toggle',ev=>{const d=ev.target;if(d.dataset?.jointDetail){if(d.open)openJointIds.add(d.dataset.jointDetail);else openJointIds.delete(d.dataset.jointDetail);}},true);
+$('#dialog').addEventListener('click',ev=>{if(ev.target===$('#dialog'))closeDialog();});
+document.addEventListener('keydown',ev=>{if(!$('#dialog').classList.contains('open'))return;if(ev.key==='Escape')closeDialog();if(ev.key==='Tab'){const nodes=[...$('#dialog').querySelectorAll('button,a,input,select,textarea,[tabindex="0"]')].filter(e=>!e.disabled);const first=nodes[0],last=nodes[nodes.length-1];if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last.focus();}else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first.focus();}}});
+$('#import-file').addEventListener('change',async ev=>{const file=ev.target.files[0];if(!file)return;try{if(file.size>200000)throw new Error('專案檔超過 200 KB，請確認檔案。');const next=normalize(JSON.parse(await file.text()));next.storageKey='thread-import-'+Date.now();s=next;openJointIds.clear();closeDialog();renderAll();setView('result');toast('已匯入並重新計算');}catch(e){toast('未匯入：'+e.message);}finally{ev.target.value='';}});
+window.ThreadApp={getState:()=>JSON.parse(JSON.stringify(s)),getResult:()=>computed,getAdvice:()=>advice,setState:v=>{s=normalize(v);openJointIds.clear();renderAll();},example,report,render:renderAll};
+renderAll();document.documentElement.classList.add('ready');$('#app').style.display='block';
+})();
+</script>
+</body></html>
