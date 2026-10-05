@@ -1,0 +1,135 @@
+name: Publish and verify sprinkler CAD v3
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/sprinkler-cad-v3.yml', 'sprinkler-cad-v3/payload-*.txt']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: sprinkler-cad-v3
+  cancel-in-progress: false
+jobs:
+  publish-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Reconstruct verified standalone HTML
+        run: |
+          python <<'PY'
+          import pathlib, base64, lzma, hashlib, json
+          from html.parser import HTMLParser
+          p=pathlib.Path('sprinkler-cad-v3')
+          payload=''.join(''.join((p/f'payload-{i}.txt').read_text().split()) for i in range(1,4))
+          raw=lzma.decompress(base64.b64decode(payload, validate=True))
+          expected='f1220cc8070fb36520d3c29130baefb6111dc22c7b07435953160e7c97e5e0b3'
+          assert hashlib.sha256(raw).hexdigest()==expected, 'Source bytes differ from verified artifact'
+          (p/'index.html').write_bytes(raw)
+          class Extract(HTMLParser):
+              def __init__(self): super().__init__(); self.key=None; self.b=[]; self.scripts={}
+              def handle_starttag(self,tag,attrs):
+                  if tag=='script': self.key=dict(attrs).get('id'); self.b=[]
+              def handle_data(self,data):
+                  if self.key: self.b.append(data)
+              def handle_endtag(self,tag):
+                  if tag=='script' and self.key: self.scripts[self.key]=''.join(self.b); self.key=None
+          x=Extract(); x.feed(raw.decode())
+          (p/'schema.json').write_text(json.dumps(json.loads(x.scripts['data-schema']), ensure_ascii=False, indent=2))
+          seeds=json.loads(x.scripts['data-seeds'])
+          for key,value in seeds.items(): (p/(key+'.project.json')).write_text(json.dumps(value,ensure_ascii=False,indent=2))
+          (p/'publication.json').write_text(json.dumps({'sha256':expected,'bytes':len(raw),'model':'sprinkler-assembly/3.0','scope':'dimension envelopes; not manufacturing or fire certification'},indent=2))
+          print('Verified SHA256:',expected,'bytes:',len(raw))
+          PY
+      - name: Publish exact file to repository
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add sprinkler-cad-v3/index.html sprinkler-cad-v3/schema.json sprinkler-cad-v3/*.project.json sprinkler-cad-v3/publication.json
+          git diff --cached --quiet || git commit -m 'publish: schema-driven CAD v3 and validated data contracts [skip ci]'
+          git push origin HEAD:master
+          echo "CAD_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Install test browsers
+        run: |
+          npm install --prefix /tmp/cad-browser playwright@1.56.0
+          /tmp/cad-browser/node_modules/.bin/playwright install --with-deps chromium webkit
+      - name: Verify public HTTPS and mobile interactions
+        env:
+          NODE_PATH: /tmp/cad-browser/node_modules
+        run: |
+          mkdir -p /tmp/cad-evidence
+          node <<'JS'
+          const fs=require('node:fs'),crypto=require('node:crypto'),{chromium,webkit}=require('playwright');
+          const url='https://rawcdn.githack.com/ZhiQiYang/test/'+process.env.CAD_COMMIT+'/sprinkler-cad-v3/index.html';
+          const expected='f1220cc8070fb36520d3c29130baefb6111dc22c7b07435953160e7c97e5e0b3';
+          const assert=(v,m)=>{if(!v)throw Error(m);};
+          (async()=>{
+            let raw,hash,status;
+            for(let k=0;k<10;k++){
+              const r=await fetch(url,{signal:AbortSignal.timeout(30000)});raw=Buffer.from(await r.arrayBuffer());status=r.status;hash=crypto.createHash('sha256').update(raw).digest('hex');
+              if(r.ok&&hash===expected)break;await new Promise(r=>setTimeout(r,5000));
+            }
+            assert(hash===expected,'Live source mismatch HTTP '+status+' '+hash);
+            const reports=[];
+            for(const [name,type] of [['chromium',chromium],['webkit',webkit]]){
+              const browser=await type.launch({headless:true});
+              const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+              const page=await ctx.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+              await page.goto(url,{waitUntil:'domcontentloaded',timeout:60000});await page.waitForTimeout(700);
+              if(!await page.evaluate(()=>!!window.SprinklerApp)){
+                const btn=page.getByRole('button',{name:/continue|proceed|confirm|understand|visit|open/i}).first();
+                const link=page.getByRole('link',{name:/continue|proceed|confirm|understand|visit|open/i}).first();
+                if(await btn.count())await btn.click();else if(await link.count())await link.click();
+              }
+              await page.waitForFunction(()=>!!window.SprinklerApp,null,{timeout:30000});
+              assert(await page.locator('#app').isVisible(),'App hidden');
+              assert(await page.evaluate(()=>SprinklerApp.model.parts.length===11&&!SprinklerApp.gate.fieldReady),'Wrong initial data/quality gate');
+              const renderer=await page.locator('#scene').getAttribute('data-renderer');
+              await page.screenshot({path:'/tmp/cad-evidence/'+name+'-3d.png'});
+              await page.locator('#scenario-mobile').selectOption('straight');
+              const before=await page.evaluate(()=>SprinklerApp.model.dropMm);
+              await page.locator('[data-select="stock"]').selectOption('210');
+              assert(await page.evaluate(d=>Math.abs(SprinklerApp.model.dropMm-d-10)<1e-6,before),'Pipe length did not change model');
+              await page.locator('[data-action="stock-solve"]').click();await page.waitForFunction(()=>SprinklerApp.result);
+              assert(await page.evaluate(()=>SprinklerApp.result.best.labelCm===20&&SprinklerApp.result.kind==='feasible'),'Stock selection wrong');
+              await page.locator('[data-apply]').first().click();
+              assert(await page.evaluate(()=>Math.abs(SprinklerApp.model.residualMm)<1e-6),'Applied solution differs from 3D');
+              const t=page.locator('[data-field="target.drop"]');await t.fill(String((before+5)/10));await t.blur();
+              await page.locator('[data-action="stock-solve"]').click();await page.waitForFunction(()=>SprinklerApp.result);
+              assert(await page.evaluate(()=>SprinklerApp.result.kind==='infeasible'),'Gap incorrectly called feasible');
+              await page.screenshot({path:'/tmp/cad-evidence/'+name+'-gap.png'});
+              await page.evaluate(()=>SprinklerApp.useSeed('straight'));
+              await page.locator('.mobile-nav [data-tab="joints"]').click();
+              const d=await page.evaluate(()=>SprinklerApp.model.dropMm);
+              await page.locator('[data-nudge="0,1"]').click();
+              assert(await page.evaluate(d=>Math.abs(d-SprinklerApp.model.dropMm-25.4/14/8)<1e-6,d),'Thread lead and pose disagree');
+              await page.evaluate(()=>SprinklerApp.useSeed('offset'));
+              await page.locator('.mobile-nav [data-tab="joints"]').click();
+              await page.locator('[data-joint-mode="0"]').selectOption('continuous');
+              const y=await page.evaluate(()=>SprinklerApp.model.datumWorld[1]);
+              await page.locator('[data-turn="0"]').fill('1.75');
+              assert(await page.evaluate(y=>Math.abs(SprinklerApp.model.datumWorld[1]-y)>100,y),'Downstream did not rotate');
+              await page.locator('.mobile-nav [data-tab="model"]').click();
+              await page.locator('[data-action="stock-solve"]').click();await page.waitForFunction(()=>SprinklerApp.result);
+              assert(await page.evaluate(()=>SprinklerApp.result.kind==='unsupported'),'General IK limitation misreported');
+              await page.evaluate(()=>SprinklerApp.useSeed('field'));
+              assert(await page.evaluate(()=>!SprinklerApp.gate.ready&&!SprinklerApp.model),'Unknown fields generated fake geometry');
+              assert(!await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),'Mobile horizontal overflow');
+              assert(errors.length===0,'Script errors: '+JSON.stringify(errors));
+              reports.push({name,renderer,viewport:[390,844],url:page.url(),sourceSha256:hash,passed:true,errors});
+              await browser.close();
+            }
+            fs.writeFileSync('/tmp/cad-evidence/results.json',JSON.stringify({url,commit:process.env.CAD_COMMIT,hash,reports,physicalIPhoneTested:false},null,2));
+            console.log('PASS LIVE CAD',JSON.stringify({url,commit:process.env.CAD_COMMIT,hash,reports}));
+          })().catch(e=>{console.error(e);process.exit(1)});
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sprinkler-cad-v3-evidence
+          path: /tmp/cad-evidence
+          if-no-files-found: ignore
+          retention-days: 14
