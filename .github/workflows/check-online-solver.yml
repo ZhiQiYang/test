@@ -1,0 +1,92 @@
+name: Check online sprinkler solver
+on:
+  push:
+    branches: [master]
+    paths: ['.github/workflows/check-online-solver.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install temporary test browser
+        run: |
+          npm install --prefix /tmp/solver-browser playwright@1.56.0
+          /tmp/solver-browser/node_modules/.bin/playwright install --with-deps chromium
+      - name: Check live page and interactions
+        env:
+          NODE_PATH: /tmp/solver-browser/node_modules
+        run: |
+          mkdir -p /tmp/solver-evidence
+          node <<'JS'
+          const {chromium}=require('playwright');
+          const crypto=require('node:crypto');
+          const fs=require('node:fs');
+          const url='https://rawcdn.githack.com/ZhiQiYang/test/1701229e6772a49cd96075edb06d13e622b6e96f/sprinkler-solver/index.html';
+          (async()=>{
+            const r=await fetch(url,{signal:AbortSignal.timeout(45000)});
+            const raw=Buffer.from(await r.arrayBuffer());
+            const hash=crypto.createHash('sha256').update(raw).digest('hex');
+            console.log('HTTP',r.status,'Content-Type',r.headers.get('content-type'),'bytes',raw.length,'SHA256',hash);
+            if(!r.ok)throw new Error('Public HTTPS page returned '+r.status);
+            if(hash!=='4b8f777402834bcdab00364a2276cf150cb381a4e938231dc6aa6af8cfc1ca3e'){
+              console.log('Response excerpt:',raw.toString('utf8').slice(0,3000));
+              throw new Error('Public HTML does not match verified solver');
+            }
+            const browser=await chromium.launch({headless:true});
+            const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+            const page=await ctx.newPage();
+            const errors=[];page.on('pageerror',e=>errors.push(e.message));
+            await page.goto(url,{waitUntil:'domcontentloaded',timeout:60000});
+            await page.waitForTimeout(1500);
+            if(!await page.evaluate(()=>!!window.ThreadApp)){
+              console.log('Entry notice:',(await page.locator('body').innerText()).slice(0,4000));
+              console.log('Entry controls:',await page.locator('button,input[type=submit],a').evaluateAll(es=>es.map(e=>({text:e.textContent,value:e.value,href:e.href}))));
+              const proceed=page.getByRole('button',{name:/continue|proceed|confirm|understand|visit|open/i}).first();
+              const link=page.getByRole('link',{name:/continue|proceed|confirm|understand|visit|open/i}).first();
+              if(await proceed.count())await proceed.click();
+              else if(await link.count())await link.click();
+            }
+            await page.waitForFunction(()=>!!window.ThreadApp,{},{timeout:30000});
+            if(!await page.locator('#app').isVisible())throw new Error('Solver not visible');
+            if(await page.locator('#boot').isVisible())throw new Error('Stuck at boot');
+            const tests=await page.evaluate(()=>ThreadTests.run());
+            if(tests.length!==25||tests.some(t=>!t.pass))throw new Error('Core tests failed');
+            const initial=await page.evaluate(()=>ThreadApp.getResult().candidate);
+            if(initial.D!==294||initial.turns.some(n=>n!==1.5))throw new Error('Wrong initial solution');
+            await page.screenshot({path:'/tmp/solver-evidence/mobile-result.png',fullPage:true});
+            await page.locator('.tab[data-view="goal"]').click();
+            await page.locator('[data-field="target"]').fill('29.8');
+            await page.locator('[data-field="target"]').blur();
+            await page.locator('.tab[data-view="result"]').click();
+            const result=await page.evaluate(()=>ThreadApp.getResult());
+            const advice=await page.evaluate(()=>ThreadApp.getAdvice());
+            if(result.kind!=='infeasible'||!advice.suggestions.some(v=>Math.abs(v.L-204)<1e-6))throw new Error('Input-to-result flow failed');
+            await page.screenshot({path:'/tmp/solver-evidence/mobile-changed.png',fullPage:true});
+            await page.evaluate(()=>ThreadApp.setState(ThreadApp.example()));
+            await page.locator('.tab[data-view="manual"]').click();
+            const before=await page.evaluate(()=>ThreadApp.getState().joints[0].manual);
+            await page.locator('[data-nudge="0"][data-sign="1"]').click();
+            const after=await page.evaluate(()=>ThreadApp.getState().joints[0].manual);
+            if(!(after>before))throw new Error('Manual turn control failed');
+            const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
+            if(overflow||errors.length)throw new Error('Layout or script errors: '+JSON.stringify({overflow,errors}));
+            console.log('PASS: live HTTPS, exact original bytes, 25 core tests, 390x844 touch viewport, target edit 29.4 -> 29.8, pipe advice 20.4 cm, manual nudge, no script errors or horizontal overflow.');
+            console.log('Verified live URL:',page.url());
+            fs.writeFileSync('/tmp/solver-evidence/result.json',JSON.stringify({url,sha256:hash,coreTests:tests.length,viewport:[390,844],inputChanged:true,advice:20.4,manualNudge:true,errors},null,2));
+            await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1);});
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: online-solver-evidence
+          path: /tmp/solver-evidence
+          retention-days: 7
+          if-no-files-found: ignore
